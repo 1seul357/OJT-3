@@ -1,11 +1,10 @@
-import { Shape } from "@svgdotjs/svg.js";
 import { colorData } from "../utils/data";
-import "react";
 import "../css/color.css";
 
-const ColorList = () => {
-  const updateColor = () => {
-    console.log("update");
+const ColorList = (result: any) => {
+  const shape = result.result;
+  const updateColor = (colorName: string) => {
+    shape.attr({ fill: colorName });
   };
 
   return (
@@ -15,7 +14,7 @@ const ColorList = () => {
           key={i}
           className="color"
           style={{ backgroundColor: colorName }}
-          onClick={updateColor}></div>
+          onClick={() => updateColor(colorName)}></div>
       ))}
     </div>
   );
