@@ -1,0 +1,13 @@
+.colorContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.color {
+  width: 100px;
+  height: 100px;
+}
+
+.color:hover {
+  cursor: pointer;
+}
