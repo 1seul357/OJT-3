@@ -1,8 +1,8 @@
 import { colorData } from "../utils/data";
 import "../css/color.css";
 
-const ColorList = (result: any) => {
-  const shape = result.result;
+const ColorList = (item: any) => {
+  const shape = item.item;
   const updateColor = (colorName: string) => {
     shape.attr({ fill: colorName });
   };
