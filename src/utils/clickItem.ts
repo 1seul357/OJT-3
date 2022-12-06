@@ -75,7 +75,7 @@ export const clickItem = (
     const rotate = g
       .circle(20)
       .cx(cx)
-      .cy(cy - Number(el.height()))
+      .cy(cy - Number(el.height()) / 1.4)
       .addClass("rotate")
       .attr({ fill: "#CCCCFF" })
       .transform(el.transform());
@@ -103,7 +103,7 @@ export const clickItem = (
         rotate.show();
         rotate
           .cx(el.cx())
-          .cy(el.cy() - Number(el.height()))
+          .cy(el.cy() - Number(el.height()) / 1.4)
           .transform(el.transform());
         draw.off("mousemove", moveHandler as EventListener);
         draw.off("mouseup", upHandler);
