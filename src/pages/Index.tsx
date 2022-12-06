@@ -9,6 +9,7 @@ import { removeSelector } from "../utils/removeSelector";
 import { removeGroup } from "../utils/removeGroup";
 import ColorList from "../components/ColorList";
 import { dragItem } from "../utils/drag";
+import { clickGroup } from "../utils/clickGroup";
 
 class SVGController {
   draw: Svg;
@@ -32,11 +33,38 @@ class SVGController {
     this.group.add(select);
   };
   makeGrouping = (setGroup: Function) => {
-    this.group.addClass("grouping");
-    setGroup(true);
+    const select = document.querySelectorAll(".select");
+    if (select.length >= 2) {
+      this.group.addClass("grouping");
+      setGroup(true);
+      if (document.querySelector(".grouping")) {
+        document.querySelectorAll(".select").forEach((node) => node.remove());
+        const box = this.group.bbox();
+        const select = this.draw
+          .rect(box.width, box.height)
+          .x(box.x)
+          .y(box.y)
+          .addClass("gselect")
+          .attr({ fill: "#ffffff66" })
+          .stroke({ color: "#00000099" });
+        this.group.add(select);
+        clickGroup(this.group, this.draw, select);
+      }
+    }
   };
   makeUnGrouping = (setGroup: Function) => {
     document.querySelectorAll(".select").forEach((node) => node.remove());
+    document.querySelector(".gclone")?.remove();
+    document.querySelector(".gselect")?.remove();
+    this.group.node.childNodes.forEach((node, i) => {
+      const tmp = SVG(node);
+      tmp.node.childNodes.forEach(
+        (n, i) => {
+          SVG(n).transform(this.group.transform());
+        }
+        // SVG(node).transform(this.group.transform());
+      );
+    });
     this.group.removeClass("grouping");
     removeSelector();
     removeGroup();
@@ -63,25 +91,18 @@ class SVGController {
         return;
       removeSelector();
       document.querySelectorAll(".select").forEach((node) => node.remove());
+      const gselect = this.group.findOne(".gselect");
+      gselect?.attr({ fill: "none", stroke: "none" });
+      const gclone = document.querySelector(".gclone");
+      const clone = SVG(gclone);
+      if (clone) {
+        clone.attr({ fill: "transparent", stroke: "none" });
+      }
       if (
         document.querySelector(".group") &&
         document.querySelector(".grouping") === null
       ) {
         removeGroup();
-      }
-    });
-
-    this.group.mousedown(() => {
-      if (document.querySelector(".grouping")) {
-        const box = this.group.bbox();
-        const select = this.draw
-          .rect(box.width, box.height)
-          .x(box.x)
-          .y(box.y)
-          .addClass("select")
-          .attr({ fill: "#ffffff66" })
-          .stroke({ color: "#00000099" });
-        this.group.add(select);
       }
     });
 
