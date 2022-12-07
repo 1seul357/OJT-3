@@ -11,7 +11,7 @@ import { removeGrouping } from "../utils/removeGrouping";
 import ColorList from "../components/ColorList";
 import { dragItem } from "../utils/drag";
 import { clickGroup } from "../utils/clickGroup";
-import { Select } from "../components/select";
+import { Select } from "../components/Select";
 
 class SVGController {
   draw: Svg;
@@ -37,7 +37,7 @@ class SVGController {
       // 그룹화되는 CSS
       const select = Select(this.draw, this.group, "gselect");
       this.group.add(select);
-      clickGroup(this.group, this.draw, select);
+      clickGroup(this.group, this.draw, select, setGroup);
     }
   };
   // 그룹화 해제 버튼으로 그룹화 해제

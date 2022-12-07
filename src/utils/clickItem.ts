@@ -1,5 +1,6 @@
 import { Shape, Svg } from "@svgdotjs/svg.js";
 import { removeSelector } from "./removeSelector";
+import { removeShape } from "./removeShape";
 import "../css/clickItem.css";
 
 export const clickItem = (
@@ -136,13 +137,13 @@ export const clickItem = (
                 clone
                   .x(Number(el.x()) + dx)
                   .width(Number(el.width()) - dx)
-                  .height(Number(el.height()) - dy);
+                  .height(Number(el.height()) + dy);
               } else {
                 clone
                   .width(Number(el.width()) + dx)
-                  .height(Number(el.height()) + dy)
-                  .x(el.x())
-                  .y(el.y());
+                  .height(Number(el.height()) + dy);
+                // .x(el.x())
+                // .y(el.y());
               }
             } else {
               if (i === 0) {
@@ -194,14 +195,6 @@ export const clickItem = (
     };
     return remove;
   };
-
-  window.addEventListener("keyup", (e) => {
-    if (e.key === "Delete") {
-      if (g.node.childElementCount >= 4) {
-        g.remove();
-      }
-    }
-  });
-
+  removeShape(g);
   controller = makeController(item);
 };
