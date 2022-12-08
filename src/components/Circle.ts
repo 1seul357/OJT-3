@@ -22,6 +22,12 @@ export default class Circle {
       .y(Math.random() * 400 + 50)
       .attr({ fill: colorData[random] });
 
-    clickItem(circle, draw, multipleSelection, setShape);
+    circle.click((e: MouseEvent) => {
+      if (e.shiftKey) {
+        multipleSelection(circle);
+        return;
+      }
+      clickItem(circle, draw, multipleSelection, setShape);
+    });
   }
 }

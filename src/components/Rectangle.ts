@@ -22,6 +22,12 @@ export default class Rectangle {
       .y(Math.random() * 400 + 50)
       .attr({ fill: colorData[random] });
 
-    clickItem(rect, draw, multipleSelection, setShape);
+    rect.click((e: MouseEvent) => {
+      if (e.shiftKey) {
+        multipleSelection(rect);
+        return;
+      }
+      clickItem(rect, draw, multipleSelection, setShape);
+    });
   }
 }

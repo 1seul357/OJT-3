@@ -14,7 +14,6 @@ export const clickGroup = (
   g.add(group).fill("transparent").stroke("#66666699").addClass("g");
 
   let controller: () => void;
-
   g.mousedown((e: MouseEvent) => {
     select.attr({ fill: "#ffffff66" }).stroke({ color: "#00000099" });
     removeSelector();
@@ -154,7 +153,18 @@ export const clickGroup = (
             }
           };
           const upHandler = () => {
-            group.size(clone.width(), clone.height()).x(clone.x()).y(clone.y());
+            group
+              .width(clone.width())
+              .height(clone.height())
+              .x(clone.x())
+              .y(clone.y());
+            // group.node.childNodes.forEach((element) => {
+            //   const tmp = SVG(element);
+            //   tmp.node.childNodes.forEach((el) => {
+            //     SVG(el).transform(tmp.transform());
+            //   });
+            // });
+
             remove();
             draw.off("mousemove", moveHandler as EventListener);
             draw.off("mouseup", upHandler);

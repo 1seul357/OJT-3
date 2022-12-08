@@ -33,6 +33,12 @@ export default class Polygon {
 
     const polygon = draw.polygon(point).attr({ fill: colorData[random] });
 
-    clickItem(polygon, draw, multipleSelection, setShape);
+    polygon.click((e: MouseEvent) => {
+      if (e.shiftKey) {
+        multipleSelection(polygon);
+        return;
+      }
+      clickItem(polygon, draw, multipleSelection, setShape);
+    });
   }
 }

@@ -13,12 +13,12 @@ export const clickItem = (
 
   const g = draw.group();
   let controller: () => void;
-  g.add(item).fill("transparent").stroke("#66666699");
+  g.add(item).fill("transparent").stroke("#66666699").addClass("g");
 
   g.mousedown((e: MouseEvent) => {
     setShape(item);
     if (e.shiftKey) {
-      multipleSelection(g);
+      multipleSelection(item);
       return;
     }
     removeSelector();
@@ -43,7 +43,7 @@ export const clickItem = (
   });
 
   const makeController = (el: Shape) => {
-    const clone = el
+    const clone = item
       .clone()
       .stroke("#66666699")
       .addClass("clone")
@@ -74,7 +74,7 @@ export const clickItem = (
     el.matrix().multiply(el.matrix().inverse());
 
     const rotate = g
-      .circle(20)
+      .circle(20 / Math.round(Number(el.transform().scaleX)))
       .cx(cx)
       .cy(cy - Number(el.height()) / 1.4)
       .addClass("rotate")
@@ -115,7 +115,7 @@ export const clickItem = (
 
     const circles = pts.map((pt, i) => {
       const circle = g
-        .circle(10)
+        .circle(10 / Math.round(Number(el.transform().scaleX)))
         .cx(pt[0])
         .cy(pt[1])
         .addClass("circles")
