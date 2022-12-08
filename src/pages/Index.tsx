@@ -20,35 +20,41 @@ import { Select } from "../components/Select";
 class SVGController {
   draw: Svg;
   group: Container;
-  constructor(element: SVGSVGElement, setGroup: Function) {
+  gg: Container;
+  constructor(element: SVGSVGElement, public setGroup: Function) {
     this.draw = SVG(element).size(1200, 750).addClass("svg");
     this.group = this.draw.group();
+    this.gg = this.draw.group();
     this.render(setGroup);
   }
   multipleSelection = (item: Svg) => {
     removeSelector();
+    this.setGroup(false);
     this.group.add(item).addClass("group");
     const select = Select(this.draw, this.group, "select");
     this.group.add(select);
   };
   makeGrouping = (setGroup: Function) => {
+    this.gg = this.group;
+    this.gg.addTo(this.draw);
+    this.group = this.draw.group();
     if (document.querySelectorAll(".select").length >= 2) {
       setGroup(true);
       document.querySelectorAll(".select").forEach((node) => node.remove());
-      const select = Select(this.draw, this.group, "gselect");
-      this.group.add(select).addClass("grouping");
-      clickGroup(this.group, this.draw, select, setGroup);
+      const select = Select(this.draw, this.gg, "gselect");
+      this.gg.add(select).addClass("grouping");
+      clickGroup(this.gg, this.draw, select, setGroup);
     }
   };
   makeUnGrouping = (setGroup: Function) => {
     removeGrouping();
-    this.group.children().forEach((el) => {
+    this.gg.children().forEach((el) => {
       el.transform(el.matrix().multiply(this.group.matrix()));
     });
-    this.group.removeClass("grouping");
+    this.gg.removeClass("grouping");
     // this.group.transform({ rotate: 0 });
     removeSelector();
-    removeGroup();
+    removeGroup(this.draw, this.gg);
     setGroup(false);
   };
   insertRect(setShape: Function, setGroup: Function) {

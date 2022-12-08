@@ -44,7 +44,7 @@ export const clickGroup = (
       .addClass("gclone")
       .fill("transparent")
       .addTo(g);
-    // clone.transform(group.transform());
+    clone.transform(group.transform());
 
     const x1 = Number(group.x());
     const x2 = x1 + Number(group.width());

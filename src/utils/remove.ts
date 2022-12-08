@@ -55,13 +55,10 @@ export const removeShape = (g: Container) => {
   });
 };
 
-export const removeGroup = () => {
-  const group = document.querySelector(".group");
-  group?.childNodes.forEach((node) =>
-    document.querySelector(".svg")?.appendChild(node)
-  );
-  if (group?.childNodes.length != 0) {
-    removeGroup();
+export const removeGroup = (draw: Svg, gg: Container) => {
+  gg?.children().forEach((node) => node.addTo(draw));
+  if (gg?.children().length != 0) {
+    removeGroup(draw, gg);
   }
 };
 
@@ -72,6 +69,6 @@ export const removeGroupSelector = (draw: Svg) => {
     document.querySelector(".group") &&
     document.querySelector(".grouping") === null
   ) {
-    removeGroup();
+    // removeGroup(draw);
   }
 };
