@@ -5,9 +5,13 @@ import Button from "@mui/material/Button";
 import Rectangle from "../components/Rectangle";
 import Circle from "../components/Circle";
 import Polygon from "../components/Polygon";
-import { removeSelector } from "../utils/removeSelector";
-import { removeGroup } from "../utils/removeGroup";
-import { removeGrouping } from "../utils/removeGrouping";
+import {
+  removeSelector,
+  removeGroup,
+  removeGrouping,
+  removeSelect,
+  removeGroupSelector,
+} from "../utils/remove";
 import ColorList from "../components/ColorList";
 import { dragItem } from "../utils/drag";
 import { clickGroup } from "../utils/clickGroup";
@@ -16,10 +20,10 @@ import { Select } from "../components/Select";
 class SVGController {
   draw: Svg;
   group: Container;
-  constructor(element: SVGSVGElement) {
+  constructor(element: SVGSVGElement, setGroup: Function) {
     this.draw = SVG(element).size(1200, 750).addClass("svg");
     this.group = this.draw.group();
-    this.render();
+    this.render(setGroup);
   }
   multipleSelection = (item: Svg) => {
     removeSelector();
@@ -30,10 +34,9 @@ class SVGController {
   makeGrouping = (setGroup: Function) => {
     if (document.querySelectorAll(".select").length >= 2) {
       setGroup(true);
-      this.group.addClass("grouping");
       document.querySelectorAll(".select").forEach((node) => node.remove());
       const select = Select(this.draw, this.group, "gselect");
-      this.group.add(select);
+      this.group.add(select).addClass("grouping");
       clickGroup(this.group, this.draw, select, setGroup);
     }
   };
@@ -48,18 +51,17 @@ class SVGController {
     removeGroup();
     setGroup(false);
   };
-  insertRect(setShape: Function) {
-    return new Rectangle(this.draw, setShape, this.multipleSelection);
+  insertRect(setShape: Function, setGroup: Function) {
+    return new Rectangle(this.draw, setShape, setGroup, this.multipleSelection);
   }
-  insertCircle(setShape: Function) {
-    return new Circle(this.draw, setShape, this.multipleSelection);
+  insertCircle(setShape: Function, setGroup: Function) {
+    return new Circle(this.draw, setShape, setGroup, this.multipleSelection);
   }
-  insertPolygon(setShape: Function) {
-    return new Polygon(this.draw, setShape, this.multipleSelection);
+  insertPolygon(setShape: Function, setGroup: Function) {
+    return new Polygon(this.draw, setShape, setGroup, this.multipleSelection);
   }
-  render() {
+  render(setGroup: Function) {
     const svg = document.querySelector("svg");
-
     svg?.addEventListener("dblclick", (e) => {
       if (
         e.target instanceof SVGRectElement ||
@@ -67,27 +69,11 @@ class SVGController {
         e.target instanceof SVGPolygonElement
       )
         return;
-      removeSelector();
-      document.querySelectorAll(".select").forEach((node) => node.remove());
+      removeSelect(this.draw);
+      removeGroupSelector(this.draw);
 
-      this.draw.find(".g").forEach((node) => {
-        if (node.node.childNodes.length === 0) {
-          node.remove();
-        }
-      });
-
-      const gselect = this.group.findOne(".gselect");
-      gselect?.attr({ fill: "none", stroke: "none" });
-      const gclone = document.querySelector(".gclone");
-      const clone = SVG(gclone);
-      if (clone) {
-        clone.attr({ fill: "transparent", stroke: "none" });
-      }
-      if (
-        document.querySelector(".group") &&
-        document.querySelector(".grouping") === null
-      ) {
-        removeGroup();
+      if (document.querySelector(".gselect")) {
+        setGroup(null);
       }
     });
 
@@ -105,16 +91,16 @@ const Index = () => {
   const svgElement = useRef<SVGSVGElement>(null); // Svg
   const controller = useRef<SVGController>(); // draw
   const [shape, setShape] = useState<Object>();
-  const [group, setGroup] = useState<Boolean>(false);
+  const [group, setGroup] = useState<any>(false);
 
   const handleRectClick = () => {
-    controller.current?.insertRect(setShape);
+    controller.current?.insertRect(setShape, setGroup);
   };
   const handlePolygonClick = () => {
-    controller.current?.insertPolygon(setShape);
+    controller.current?.insertPolygon(setShape, setGroup);
   };
   const handleCircleClick = () => {
-    controller.current?.insertCircle(setShape);
+    controller.current?.insertCircle(setShape, setGroup);
   };
   const makeGroup = () => {
     controller.current?.makeGrouping(setGroup);
@@ -124,7 +110,7 @@ const Index = () => {
   };
 
   useEffect(() => {
-    controller.current = new SVGController(svgElement.current!);
+    controller.current = new SVGController(svgElement.current!, setGroup);
   }, []);
 
   return (
@@ -154,7 +140,7 @@ const Index = () => {
           onClick={makeGroup}>
           GROUP
         </Button>
-      ) : (
+      ) : group === true ? (
         <Button
           color="success"
           variant="outlined"
@@ -162,7 +148,7 @@ const Index = () => {
           onClick={makeUnGroup}>
           UNGROUP
         </Button>
-      )}
+      ) : null}
       <svg ref={svgElement}></svg>
       <ColorList item={shape} />
     </div>

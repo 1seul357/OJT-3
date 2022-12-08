@@ -1,6 +1,5 @@
 import { Container, Shape, Svg } from "@svgdotjs/svg.js";
-import { removeSelector } from "./removeSelector";
-import { removeShapeGroup } from "./removeShape";
+import { removeSelector, removeShapeGroup } from "./remove";
 import "../css/clickItem.css";
 
 export const clickGroup = (
@@ -9,14 +8,13 @@ export const clickGroup = (
   select: Shape,
   setGroup: Function
 ) => {
-  document.querySelector(".g")?.remove();
-  const g = draw.group();
-  g.add(group).fill("transparent").stroke("#66666699").addClass("g");
-
+  const g = draw.group().add(group).addClass("g");
   let controller: () => void;
+
   g.mousedown((e: MouseEvent) => {
-    select.attr({ fill: "#ffffff66" }).stroke({ color: "#00000099" });
+    setGroup(true);
     removeSelector();
+    select.attr({ fill: "#ffffff66" }).stroke({ color: "#00000099" });
     const x = Number(g.x());
     const y = Number(g.y());
     const startPoint = draw.point(e.clientX, e.clientY);
@@ -38,7 +36,6 @@ export const clickGroup = (
   });
 
   const makeController = () => {
-    document.querySelector(".gclone")?.remove();
     const clone = draw
       .rect(Number(group.width()), Number(group.height()))
       .x(group.x())
@@ -47,7 +44,7 @@ export const clickGroup = (
       .addClass("gclone")
       .fill("transparent")
       .addTo(g);
-    clone.transform(group.transform());
+    // clone.transform(group.transform());
 
     const x1 = Number(group.x());
     const x2 = x1 + Number(group.width());
@@ -61,7 +58,6 @@ export const clickGroup = (
       [x1, y2],
       [x2, y2],
     ];
-
     group.transform().rotate ?? (0 * Math.PI) / 180;
     group.matrix().multiply(group.matrix().inverse());
 
@@ -158,13 +154,6 @@ export const clickGroup = (
               .height(clone.height())
               .x(clone.x())
               .y(clone.y());
-            // group.node.childNodes.forEach((element) => {
-            //   const tmp = SVG(element);
-            //   tmp.node.childNodes.forEach((el) => {
-            //     SVG(el).transform(tmp.transform());
-            //   });
-            // });
-
             remove();
             draw.off("mousemove", moveHandler as EventListener);
             draw.off("mouseup", upHandler);

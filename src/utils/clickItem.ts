@@ -1,22 +1,26 @@
 import { Shape, Svg } from "@svgdotjs/svg.js";
-import { removeSelector } from "./removeSelector";
-import { removeShape } from "./removeShape";
+import { removeSelector, removeShape, removeGroupSelector } from "./remove";
 import "../css/clickItem.css";
 
 export const clickItem = (
   item: Shape,
   draw: Svg,
   multipleSelection: Function,
-  setShape: Function
+  setShape: Function,
+  setGroup: Function
 ) => {
   removeSelector();
 
   const g = draw.group();
   let controller: () => void;
-  g.add(item).fill("transparent").stroke("#66666699").addClass("g");
+  g.add(item).fill("transparent").addClass("g");
 
   g.mousedown((e: MouseEvent) => {
     setShape(item);
+    // removeGroupSelector(draw);
+    if (document.querySelector(".grouping")) {
+      setGroup(null);
+    }
     if (e.shiftKey) {
       multipleSelection(item);
       return;

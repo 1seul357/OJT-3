@@ -6,6 +6,7 @@ export default class Rectangle {
   constructor(
     public draw: Svg,
     public setShape: Function,
+    public setGroup: Function,
     public multipleSelection: Function
   ) {
     this.render();
@@ -14,6 +15,7 @@ export default class Rectangle {
     const draw = this.draw;
     const random = Math.floor(Math.random() * colorData.length);
     const setShape = this.setShape;
+    const setGroup = this.setGroup;
     const multipleSelection = this.multipleSelection;
 
     const rect = draw
@@ -27,7 +29,10 @@ export default class Rectangle {
         multipleSelection(rect);
         return;
       }
-      clickItem(rect, draw, multipleSelection, setShape);
+      if (document.querySelector(".grouping")) {
+        setGroup(null);
+      }
+      clickItem(rect, draw, multipleSelection, setShape, setGroup);
     });
   }
 }

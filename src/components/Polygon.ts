@@ -6,6 +6,7 @@ export default class Polygon {
   constructor(
     public draw: Svg,
     public setShape: Function,
+    public setGroup: Function,
     public multipleSelection: Function
   ) {
     this.render();
@@ -16,6 +17,7 @@ export default class Polygon {
     const x = Math.random() * 1000 + 50;
     const y = Math.random() * 400 + 50;
     const setShape = this.setShape;
+    const setGroup = this.setGroup;
     const multipleSelection = this.multipleSelection;
 
     const point =
@@ -38,7 +40,10 @@ export default class Polygon {
         multipleSelection(polygon);
         return;
       }
-      clickItem(polygon, draw, multipleSelection, setShape);
+      if (document.querySelector(".grouping")) {
+        setGroup(null);
+      }
+      clickItem(polygon, draw, multipleSelection, setShape, setGroup);
     });
   }
 }
