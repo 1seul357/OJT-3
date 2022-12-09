@@ -4,6 +4,7 @@ import {
   removeShapeGroup,
   removeGroupSelector,
 } from "./remove";
+import { dragAndDrop } from "../components/DragAndDrop";
 import "../css/clickItem.css";
 
 export const clickGroup = (
@@ -19,28 +20,11 @@ export const clickGroup = (
 
   g.mousedown((e: MouseEvent) => {
     setGroup(true);
-    removeSelector();
     clickItem(group);
+    removeSelector();
     removeGroupSelector(draw);
     select.attr({ fill: "#ffffff66" }).stroke({ color: "#00000099" });
-    const x = Number(g.x());
-    const y = Number(g.y());
-    const startPoint = draw.point(e.clientX, e.clientY);
-
-    const moveHandler = (e: MouseEvent) => {
-      controller();
-      const newPoint = draw.point(e.clientX, e.clientY);
-      g.x(x + newPoint.x - startPoint.x).y(y + newPoint.y - startPoint.y);
-    };
-
-    const upHandler = () => {
-      controller();
-      draw.off("mousemove", moveHandler as EventListener);
-      draw.off("mouseup", upHandler);
-      controller = makeController();
-    };
-    draw.on("mousemove", moveHandler as EventListener);
-    draw.on("mouseup", upHandler);
+    dragAndDrop(g, draw, e, controller, makeController);
   });
 
   const makeController = () => {

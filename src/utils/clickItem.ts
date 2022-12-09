@@ -1,5 +1,6 @@
 import { Shape, Svg } from "@svgdotjs/svg.js";
 import { removeSelector, removeShape, removeGroupSelector } from "./remove";
+import { dragAndDrop } from "../components/DragAndDrop";
 import "../css/clickItem.css";
 
 export const clickItem = (
@@ -9,11 +10,9 @@ export const clickItem = (
   setShape: Function,
   setGroup: Function
 ) => {
-  removeSelector();
-
-  const g = draw.group();
+  const g = draw.group().add(item).fill("transparent").addClass("g");
   let controller: () => void;
-  g.add(item).fill("transparent").addClass("g");
+  removeSelector();
 
   g.mousedown((e: MouseEvent) => {
     setShape(item);
@@ -26,24 +25,7 @@ export const clickItem = (
       return;
     }
     removeSelector();
-    const x = Number(g.x());
-    const y = Number(g.y());
-    const startPoint = draw.point(e.clientX, e.clientY);
-
-    const moveHandler = (e: MouseEvent) => {
-      controller();
-      const newPoint = draw.point(e.clientX, e.clientY);
-      g.x(x + newPoint.x - startPoint.x).y(y + newPoint.y - startPoint.y);
-    };
-
-    const upHandler = () => {
-      controller();
-      draw.off("mousemove", moveHandler as EventListener);
-      draw.off("mouseup", upHandler);
-      controller = makeController(item);
-    };
-    draw.on("mousemove", moveHandler as EventListener);
-    draw.on("mouseup", upHandler);
+    dragAndDrop(g, draw, e, controller, makeController);
   });
 
   const makeController = (el: Shape) => {

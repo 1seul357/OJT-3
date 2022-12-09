@@ -8,7 +8,6 @@ import Polygon from "../components/Polygon";
 import {
   removeSelector,
   removeGroup,
-  removeGrouping,
   removeSelect,
   removeGroupSelector,
 } from "../utils/remove";
@@ -21,11 +20,15 @@ class SVGController {
   draw: Svg;
   group: Container;
   gg: Container;
-  constructor(element: SVGSVGElement, public setGroup: Function) {
+  constructor(
+    element: SVGSVGElement,
+    public setGroup: Function,
+    public setShape: Function
+  ) {
     this.draw = SVG(element).size(1200, 750).addClass("svg");
     this.group = this.draw.group();
     this.gg = this.draw.group();
-    this.render(setGroup);
+    this.render();
   }
   multipleSelection = (item: Svg) => {
     removeSelector();
@@ -35,40 +38,52 @@ class SVGController {
     this.group.add(select);
     dragItem(this.group);
   };
-  makeGrouping = (setGroup: Function) => {
+  makeGrouping = () => {
     this.gg = this.group;
     if (document.querySelectorAll(".select").length >= 2) {
       this.group = this.draw.group();
-      setGroup(true);
+      this.setGroup(true);
       document.querySelectorAll(".select").forEach((node) => node.remove());
       const select = Select(this.draw, this.gg, "gselect");
       this.gg.add(select).addClass("grouping");
-      clickGroup(this.gg, this.draw, select, setGroup, this.clickItem);
+      clickGroup(this.gg, this.draw, select, this.setGroup, this.clickItem);
     }
   };
-  makeUnGrouping = (setGroup: Function) => {
+  makeUnGrouping = () => {
     this.gg.children().forEach((el) => {
       el.transform(el.matrix().multiply(this.gg.matrix()));
     });
-    this.gg.removeClass("grouping");
-    // this.group.transform({ rotate: 0 });
-    removeSelector();
     removeGroup(this.draw, this.gg);
-    setGroup(false);
+    this.setGroup(false);
   };
   clickItem = (item: Container) => {
     this.gg = item;
   };
-  insertRect(setShape: Function, setGroup: Function) {
-    return new Rectangle(this.draw, setShape, setGroup, this.multipleSelection);
+  insertRect() {
+    return new Rectangle(
+      this.draw,
+      this.setShape,
+      this.setGroup,
+      this.multipleSelection
+    );
   }
-  insertCircle(setShape: Function, setGroup: Function) {
-    return new Circle(this.draw, setShape, setGroup, this.multipleSelection);
+  insertCircle() {
+    return new Circle(
+      this.draw,
+      this.setShape,
+      this.setGroup,
+      this.multipleSelection
+    );
   }
-  insertPolygon(setShape: Function, setGroup: Function) {
-    return new Polygon(this.draw, setShape, setGroup, this.multipleSelection);
+  insertPolygon() {
+    return new Polygon(
+      this.draw,
+      this.setShape,
+      this.setGroup,
+      this.multipleSelection
+    );
   }
-  render(setGroup: Function) {
+  render() {
     const svg = document.querySelector("svg");
     svg?.addEventListener("dblclick", (e) => {
       if (
@@ -81,7 +96,7 @@ class SVGController {
       removeGroupSelector(this.draw);
 
       if (document.querySelector(".gselect")) {
-        setGroup(null);
+        this.setGroup(null);
       }
     });
   }
@@ -91,26 +106,30 @@ const Index = () => {
   const svgElement = useRef<SVGSVGElement>(null); // Svg
   const controller = useRef<SVGController>(); // draw
   const [shape, setShape] = useState<Object>();
-  const [group, setGroup] = useState<any>(false);
+  const [group, setGroup] = useState<boolean | null>(false);
 
   const handleRectClick = () => {
-    controller.current?.insertRect(setShape, setGroup);
+    controller.current?.insertRect();
   };
   const handlePolygonClick = () => {
-    controller.current?.insertPolygon(setShape, setGroup);
+    controller.current?.insertPolygon();
   };
   const handleCircleClick = () => {
-    controller.current?.insertCircle(setShape, setGroup);
+    controller.current?.insertCircle();
   };
   const makeGroup = () => {
-    controller.current?.makeGrouping(setGroup);
+    controller.current?.makeGrouping();
   };
   const makeUnGroup = () => {
-    controller.current?.makeUnGrouping(setGroup);
+    controller.current?.makeUnGrouping();
   };
 
   useEffect(() => {
-    controller.current = new SVGController(svgElement.current!, setGroup);
+    controller.current = new SVGController(
+      svgElement.current!,
+      setGroup,
+      setShape
+    );
   }, []);
 
   return (

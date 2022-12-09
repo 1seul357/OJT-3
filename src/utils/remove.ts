@@ -64,6 +64,7 @@ export const removeGroup = (draw: Svg, gg: Container) => {
     removeGroup(draw, gg);
   }
   gg.parent()?.remove();
+  removeSelector();
 };
 
 export const removeGroupSelector = (draw: Svg) => {
