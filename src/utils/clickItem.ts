@@ -17,7 +17,7 @@ export const clickItem = (
 
   g.mousedown((e: MouseEvent) => {
     setShape(item);
-    // removeGroupSelector(draw);
+    removeGroupSelector(draw);
     if (document.querySelector(".grouping")) {
       setGroup(null);
     }

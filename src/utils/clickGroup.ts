@@ -1,19 +1,27 @@
 import { Container, Shape, Svg } from "@svgdotjs/svg.js";
-import { removeSelector, removeShapeGroup } from "./remove";
+import {
+  removeSelector,
+  removeShapeGroup,
+  removeGroupSelector,
+} from "./remove";
 import "../css/clickItem.css";
 
 export const clickGroup = (
   group: Container,
   draw: Svg,
   select: Shape,
-  setGroup: Function
+  setGroup: Function,
+  clickItem: Function
 ) => {
   const g = draw.group().add(group).addClass("g");
   let controller: () => void;
+  removeGroupSelector(draw);
 
   g.mousedown((e: MouseEvent) => {
     setGroup(true);
     removeSelector();
+    clickItem(group);
+    removeGroupSelector(draw);
     select.attr({ fill: "#ffffff66" }).stroke({ color: "#00000099" });
     const x = Number(g.x());
     const y = Number(g.y());

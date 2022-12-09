@@ -56,19 +56,24 @@ export const removeShape = (g: Container) => {
 };
 
 export const removeGroup = (draw: Svg, gg: Container) => {
-  gg?.children().forEach((node) => node.addTo(draw));
+  gg.findOne(".gselect")?.remove();
+  gg?.children().forEach((node) => {
+    node.addTo(draw);
+  });
   if (gg?.children().length != 0) {
     removeGroup(draw, gg);
   }
+  gg.parent()?.remove();
 };
 
 export const removeGroupSelector = (draw: Svg) => {
-  draw.findOne(".gselect")?.attr({ fill: "none", stroke: "none" });
-  draw.findOne(".gclone")?.attr({ fill: "transparent", stroke: "none" });
-  if (
-    document.querySelector(".group") &&
-    document.querySelector(".grouping") === null
-  ) {
+  draw
+    .find(".gselect")
+    ?.forEach((node) => node.attr({ fill: "none", stroke: "none" }));
+  draw
+    .find(".gclone")
+    ?.forEach((node) => node.attr({ fill: "transparent", stroke: "none" }));
+  if (draw.find(".group") && draw.find(".grouping") === null) {
     // removeGroup(draw);
   }
 };

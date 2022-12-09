@@ -33,29 +33,31 @@ class SVGController {
     this.group.add(item).addClass("group");
     const select = Select(this.draw, this.group, "select");
     this.group.add(select);
+    dragItem(this.group);
   };
   makeGrouping = (setGroup: Function) => {
     this.gg = this.group;
-    this.gg.addTo(this.draw);
-    this.group = this.draw.group();
     if (document.querySelectorAll(".select").length >= 2) {
+      this.group = this.draw.group();
       setGroup(true);
       document.querySelectorAll(".select").forEach((node) => node.remove());
       const select = Select(this.draw, this.gg, "gselect");
       this.gg.add(select).addClass("grouping");
-      clickGroup(this.gg, this.draw, select, setGroup);
+      clickGroup(this.gg, this.draw, select, setGroup, this.clickItem);
     }
   };
   makeUnGrouping = (setGroup: Function) => {
-    removeGrouping();
     this.gg.children().forEach((el) => {
-      el.transform(el.matrix().multiply(this.group.matrix()));
+      el.transform(el.matrix().multiply(this.gg.matrix()));
     });
     this.gg.removeClass("grouping");
     // this.group.transform({ rotate: 0 });
     removeSelector();
     removeGroup(this.draw, this.gg);
     setGroup(false);
+  };
+  clickItem = (item: Container) => {
+    this.gg = item;
   };
   insertRect(setShape: Function, setGroup: Function) {
     return new Rectangle(this.draw, setShape, setGroup, this.multipleSelection);
@@ -82,14 +84,6 @@ class SVGController {
         setGroup(null);
       }
     });
-
-    this.group.draggable().on("dragmove", ((e: CustomEvent) => {
-      e.preventDefault();
-      removeSelector();
-      if (document.querySelector(".group")) {
-        dragItem(e);
-      }
-    }) as EventListener);
   }
 }
 

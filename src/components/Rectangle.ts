@@ -1,6 +1,7 @@
 import { Svg } from "@svgdotjs/svg.js";
 import { clickItem } from "../utils/clickItem";
 import { colorData } from "../utils/data";
+import { removeGroupSelector } from "../utils/remove";
 
 export default class Rectangle {
   constructor(
@@ -25,6 +26,7 @@ export default class Rectangle {
       .attr({ fill: colorData[random] });
 
     rect.click((e: MouseEvent) => {
+      removeGroupSelector(draw);
       if (e.shiftKey) {
         multipleSelection(rect);
         return;

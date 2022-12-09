@@ -1,6 +1,7 @@
 import { Svg } from "@svgdotjs/svg.js";
 import { clickItem } from "../utils/clickItem";
 import { colorData } from "../utils/data";
+import { removeGroupSelector } from "../utils/remove";
 
 export default class Polygon {
   constructor(
@@ -36,6 +37,7 @@ export default class Polygon {
     const polygon = draw.polygon(point).attr({ fill: colorData[random] });
 
     polygon.click((e: MouseEvent) => {
+      removeGroupSelector(draw);
       if (e.shiftKey) {
         multipleSelection(polygon);
         return;
