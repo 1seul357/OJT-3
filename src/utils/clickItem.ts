@@ -1,5 +1,10 @@
 import { Shape, Svg } from "@svgdotjs/svg.js";
-import { removeSelector, removeGroupSelector, removeItem } from "./remove";
+import {
+  removeSelector,
+  removeGroupSelector,
+  removeItem,
+  removeG,
+} from "./remove";
 import { dragAndDrop } from "../components/DragAndDrop";
 import "../css/clickItem.css";
 
@@ -10,11 +15,7 @@ export const clickItem = (
   setShape: Function,
   setGroup: Function
 ) => {
-  draw.find(".g").forEach((node) => {
-    if (node.node.childElementCount === 0) {
-      node.remove();
-    }
-  });
+  removeG(draw);
   const g = draw.group().add(item).fill("transparent").addClass("g");
   let controller: () => void;
   removeSelector();
@@ -71,7 +72,8 @@ export const clickItem = (
       .cy(y1 - 50)
       .addClass("rotate")
       .attr({ fill: "#CCCCFF" })
-      .transform(item.transform());
+      .matrix(item.matrix());
+
     rotate.on("mousedown", (e) => {
       e.stopPropagation();
       rotate.hide();

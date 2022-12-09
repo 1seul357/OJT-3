@@ -1,4 +1,4 @@
-import { Container, Shape, Svg, SVG } from "@svgdotjs/svg.js";
+import { Container, Svg, SVG } from "@svgdotjs/svg.js";
 import "@svgdotjs/svg.draggable.js";
 import { useEffect, useRef, useState } from "react";
 import Button from "@mui/material/Button";

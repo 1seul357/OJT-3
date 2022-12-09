@@ -1,5 +1,10 @@
 import { Container, Shape, Svg } from "@svgdotjs/svg.js";
-import { removeSelector, removeGroupSelector, removeItem } from "./remove";
+import {
+  removeSelector,
+  removeGroupSelector,
+  removeItem,
+  removeG,
+} from "./remove";
 import { dragAndDrop } from "../components/DragAndDrop";
 import "../css/clickItem.css";
 
@@ -10,6 +15,7 @@ export const clickGroup = (
   setGroup: Function,
   clickItem: Function
 ) => {
+  removeG(draw);
   const g = draw.group().add(group).addClass("g");
   let controller: () => void;
   removeGroupSelector(draw);

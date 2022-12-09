@@ -19,6 +19,14 @@ export const removeSelect = (draw: Svg) => {
   document.querySelector(".clone")?.remove();
 };
 
+export const removeG = (draw: Svg) => {
+  draw.find(".g").forEach((node) => {
+    if (node.node.childElementCount === 0) {
+      node.remove();
+    }
+  });
+};
+
 export const removeGroup = (draw: Svg, gg: Container) => {
   gg.findOne(".gselect")?.remove();
   gg?.children().forEach((node) => {
