@@ -28,7 +28,7 @@ export const clickItem = (
     dragAndDrop(g, draw, e, controller, makeController);
   });
 
-  const makeController = (el: Shape) => {
+  const makeController = () => {
     const clone = item
       .clone()
       .stroke("#66666699")
@@ -36,14 +36,14 @@ export const clickItem = (
       .fill("transparent")
       .addTo(g);
 
-    const x1 = Number(el.x());
-    const x2 = x1 + Number(el.width());
-    const y1 = Number(el.y());
-    const y2 = y1 + Number(el.height());
+    const x1 = Number(item.x());
+    const x2 = x1 + Number(item.width());
+    const y1 = Number(item.y());
+    const y2 = y1 + Number(item.height());
     const cx = (x1 + x2) / 2;
     const cy = (y1 + y2) / 2;
     const pts =
-      el.type === "polygon"
+      item.type === "polygon"
         ? [
             [cx, y1],
             [x1, y2],
@@ -56,16 +56,16 @@ export const clickItem = (
             [x2, y2],
           ];
 
-    el.transform().rotate ?? (0 * Math.PI) / 180;
-    el.matrix().multiply(el.matrix().inverse());
+    item.transform().rotate ?? (0 * Math.PI) / 180;
+    item.matrix().multiply(item.matrix().inverse());
 
     const rotate = g
-      .circle(20 / Math.round(Number(el.transform().scaleX)))
+      .circle(20 / Math.round(Number(item.transform().scaleX)))
       .cx(cx)
-      .cy(cy - Number(el.height()) / 1.4)
+      .cy(cy - Number(item.height()) / 1.4)
       .addClass("rotate")
       .attr({ fill: "#CCCCFF" })
-      .transform(el.transform());
+      .transform(item.transform());
     rotate.on("mousedown", (e) => {
       e.stopPropagation();
       rotate.hide();
@@ -75,8 +75,8 @@ export const clickItem = (
         circles.forEach((el) => el.remove());
 
         const pt = draw.point(e.clientX, e.clientY);
-        const x = x1 + Number(el.width());
-        const y = y1 + Number(el.height());
+        const x = x1 + Number(item.width());
+        const y = y1 + Number(item.height());
         const angle = Math.atan2(pt.x - x, -(pt.y - y)) * (180 / Math.PI);
 
         clone.transform(
@@ -86,12 +86,12 @@ export const clickItem = (
       };
 
       const upHandler = () => {
-        el.transform(clone.transform());
+        item.transform(clone.transform());
         rotate.show();
         rotate
-          .cx(el.cx())
-          .cy(el.cy() - Number(el.height()) / 1.4)
-          .transform(el.transform());
+          .cx(item.cx())
+          .cy(item.cy() - Number(item.height()) / 1.4)
+          .transform(item.transform());
         draw.off("mousemove", moveHandler as EventListener);
         draw.off("mouseup", upHandler);
       };
@@ -101,73 +101,75 @@ export const clickItem = (
 
     const circles = pts.map((pt, i) => {
       const circle = g
-        .circle(10 / Math.round(Number(el.transform().scaleX)))
+        .circle(10 / Math.round(Number(item.transform().scaleX)))
         .cx(pt[0])
         .cy(pt[1])
         .addClass("circles")
-        .transform(el.transform())
+        .transform(item.transform())
         .fill("#666666")
         .mousedown((e: MouseEvent) => {
           document.querySelectorAll(".rotate").forEach((node) => node.remove());
           e.stopPropagation();
           const moveHandler = (e: MouseEvent) => {
             const point = draw.point(e.clientX, e.clientY);
-            const rotatedPoint = point.transform(el.matrix().inverse());
+            const rotatedPoint = point.transform(item.matrix().inverse());
             const dx = rotatedPoint.x - pt[0];
             const dy = rotatedPoint.y - pt[1];
 
             if (item.type === "polygon") {
               if (i === 0) {
-                clone.height(Number(el.height()) - dy).y(Number(el.y()) + dy);
+                clone
+                  .height(Number(item.height()) - dy)
+                  .y(Number(item.y()) + dy);
               } else if (i === 1) {
                 clone
-                  .x(Number(el.x()) + dx)
-                  .width(Number(el.width()) - dx)
-                  .height(Number(el.height()) + dy);
+                  .x(Number(item.x()) + dx)
+                  .width(Number(item.width()) - dx)
+                  .height(Number(item.height()) + dy);
               } else {
                 clone
-                  .width(Number(el.width()) + dx)
-                  .height(Number(el.height()) + dy);
+                  .width(Number(item.width()) + dx)
+                  .height(Number(item.height()) + dy);
                 // .x(el.x())
                 // .y(el.y());
               }
             } else {
               if (i === 0) {
                 clone
-                  .width(Number(el.width()) - dx)
-                  .height(Number(el.height()) - dy)
-                  .x(Number(el.x()) + dx)
-                  .y(Number(el.y()) + dy);
+                  .width(Number(item.width()) - dx)
+                  .height(Number(item.height()) - dy)
+                  .x(Number(item.x()) + dx)
+                  .y(Number(item.y()) + dy);
               }
               if (i === 1) {
                 clone
-                  .width(Number(el.width()) + dx)
-                  .height(Number(el.height()) - dy)
-                  .x(el.x())
-                  .y(Number(el.y()) + dy);
+                  .width(Number(item.width()) + dx)
+                  .height(Number(item.height()) - dy)
+                  .x(item.x())
+                  .y(Number(item.y()) + dy);
               }
               if (i === 2) {
                 clone
-                  .width(Number(el.width()) - dx)
-                  .height(Number(el.height()) + dy)
-                  .x(Number(el.x()) + dx)
-                  .y(el.y());
+                  .width(Number(item.width()) - dx)
+                  .height(Number(item.height()) + dy)
+                  .x(Number(item.x()) + dx)
+                  .y(item.y());
               }
               if (i === 3) {
                 clone
-                  .width(Number(el.width()) + dx)
-                  .height(Number(el.height()) + dy)
-                  .x(el.x())
-                  .y(el.y());
+                  .width(Number(item.width()) + dx)
+                  .height(Number(item.height()) + dy)
+                  .x(item.x())
+                  .y(item.y());
               }
             }
           };
           const upHandler = () => {
-            el.size(clone.width(), clone.height()).x(clone.x()).y(clone.y());
+            item.size(clone.width(), clone.height()).x(clone.x()).y(clone.y());
             remove();
             draw.off("mousemove", moveHandler as EventListener);
             draw.off("mouseup", upHandler);
-            controller = makeController(el);
+            controller = makeController();
           };
           draw.on("mousemove", moveHandler as EventListener);
           draw.on("mouseup", upHandler);
@@ -182,5 +184,5 @@ export const clickItem = (
     return remove;
   };
   removeShape(g);
-  controller = makeController(item);
+  controller = makeController();
 };

@@ -1,4 +1,4 @@
-import { Container, Svg } from "@svgdotjs/svg.js";
+import { Container, Shape, Svg } from "@svgdotjs/svg.js";
 
 export const dragAndDrop = (
   g: Container,
@@ -21,7 +21,7 @@ export const dragAndDrop = (
     controller();
     draw.off("mousemove", moveHandler as EventListener);
     draw.off("mouseup", upHandler);
-    controller = makeController(g);
+    controller = makeController();
   };
   draw.on("mousemove", moveHandler as EventListener);
   draw.on("mouseup", upHandler);
