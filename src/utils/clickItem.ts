@@ -1,5 +1,5 @@
 import { Shape, Svg } from "@svgdotjs/svg.js";
-import { removeSelector, removeGroupSelector } from "./remove";
+import { removeSelector, removeGroupSelector, removeItem } from "./remove";
 import { dragAndDrop } from "../components/DragAndDrop";
 import "../css/clickItem.css";
 
@@ -190,4 +190,5 @@ export const clickItem = (
     return remove;
   };
   controller = makeController();
+  removeItem(g);
 };

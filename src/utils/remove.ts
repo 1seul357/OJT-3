@@ -17,42 +17,6 @@ export const removeSelect = (draw: Svg) => {
   document.querySelectorAll(".circles").forEach((node) => node.remove());
   document.querySelectorAll(".rotate").forEach((node) => node.remove());
   document.querySelector(".clone")?.remove();
-
-  draw.find(".g").forEach((node) => {
-    if (node.node.childNodes.length === 0) {
-      node.remove();
-    }
-  });
-};
-
-export const removeShapeGroup = (group: Container, setGroup: Function) => {
-  window.addEventListener("keyup", (e) => {
-    if (e.key === "Delete") {
-      setGroup(false);
-      if (group.node.childElementCount >= 2) {
-        while (group.node.childNodes.length >= 1) {
-          group.node.childNodes.forEach((el: any) => el.remove());
-          document.querySelector(".gclone")?.remove();
-          document
-            .querySelectorAll(".circles")
-            .forEach((node) => node.remove());
-          document.querySelector(".rotate")?.remove();
-          group.removeClass("grouping");
-          setGroup(false);
-        }
-      }
-    }
-  });
-};
-
-export const removeShape = (g: Container) => {
-  window.addEventListener("keyup", (e) => {
-    if (e.key === "Delete") {
-      if (g.node.childElementCount >= 4) {
-        g.remove();
-      }
-    }
-  });
 };
 
 export const removeGroup = (draw: Svg, gg: Container) => {
@@ -77,4 +41,14 @@ export const removeGroupSelector = (draw: Svg) => {
   if (draw.find(".group") && draw.find(".grouping") === null) {
     // removeGroup(draw);
   }
+};
+
+export const removeItem = (g: Container) => {
+  window.addEventListener("keyup", (e) => {
+    if (e.key === "Delete") {
+      if (g.node.childElementCount >= 4) {
+        g.remove();
+      }
+    }
+  });
 };
