@@ -1,4 +1,4 @@
-import { Container, Shape, Svg } from "@svgdotjs/svg.js";
+import { Container, Svg } from "@svgdotjs/svg.js";
 
 export const dragAndDrop = (
   g: Container,

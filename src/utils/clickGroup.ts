@@ -17,14 +17,15 @@ export const clickGroup = (
   const g = draw.group().add(group).addClass("g");
   let controller: () => void;
   removeGroupSelector(draw);
+  select.attr({ fill: "#ffffff66" }).stroke({ color: "#00000099" });
 
   g.mousedown((e: MouseEvent) => {
     setGroup(true);
     clickItem(group);
     removeSelector();
     removeGroupSelector(draw);
-    select.attr({ fill: "#ffffff66" }).stroke({ color: "#00000099" });
     dragAndDrop(g, draw, e, controller, makeController);
+    select.attr({ fill: "#ffffff66" }).stroke({ color: "#00000099" });
   });
 
   const makeController = () => {

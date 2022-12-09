@@ -13,6 +13,7 @@ export const clickItem = (
   const g = draw.group().add(item).fill("transparent").addClass("g");
   let controller: () => void;
   removeSelector();
+  setShape(item);
 
   g.mousedown((e: MouseEvent) => {
     setShape(item);

@@ -12,7 +12,7 @@ import {
   removeGroupSelector,
 } from "../utils/remove";
 import ColorList from "../components/ColorList";
-import { dragItem } from "../utils/drag";
+import { dragItem } from "../components/Drag";
 import { clickGroup } from "../utils/clickGroup";
 import { Select } from "../components/Select";
 
@@ -36,7 +36,7 @@ class SVGController {
     this.group.add(item).addClass("group");
     const select = Select(this.draw, this.group, "select");
     this.group.add(select);
-    dragItem(this.group);
+    dragItem(this.draw, this.group);
   };
   makeGrouping = () => {
     this.gg = this.group;
