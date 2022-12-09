@@ -15,11 +15,17 @@ import ColorList from "../components/ColorList";
 import { dragItem } from "../components/Drag";
 import { clickGroup } from "../utils/clickGroup";
 import { Select } from "../components/Select";
-
+// [
+//   {
+//     type: "group",
+//     transform: "matrix(1,0,0,1,150,150)",
+//     children: [{ type: "rect", x: 10, y: 10 }],
+//   },
+// ];
 class SVGController {
   draw: Svg;
   group: Container;
-  gg: Container;
+  g: Container;
   constructor(
     element: SVGSVGElement,
     public setGroup: Function,
@@ -27,7 +33,7 @@ class SVGController {
   ) {
     this.draw = SVG(element).size(1200, 750).addClass("svg");
     this.group = this.draw.group();
-    this.gg = this.draw.group();
+    this.g = this.draw.group();
     this.render();
   }
   multipleSelection = (item: Svg) => {
@@ -39,25 +45,25 @@ class SVGController {
     dragItem(this.draw, this.group);
   };
   makeGrouping = () => {
-    this.gg = this.group;
+    this.g = this.group;
     if (document.querySelectorAll(".select").length >= 2) {
       this.group = this.draw.group();
       this.setGroup(true);
       document.querySelectorAll(".select").forEach((node) => node.remove());
-      const select = Select(this.draw, this.gg, "gselect");
-      this.gg.add(select).addClass("grouping");
-      clickGroup(this.gg, this.draw, select, this.setGroup, this.clickItem);
+      const select = Select(this.draw, this.g, "gselect");
+      this.g.add(select).addClass("grouping");
+      clickGroup(this.g, this.draw, select, this.setGroup, this.clickItem);
     }
   };
   makeUnGrouping = () => {
-    this.gg.children().forEach((el) => {
-      el.transform(el.matrix().multiply(this.gg.matrix()));
+    this.g.children().forEach((el) => {
+      el.matrix(this.g.matrix().multiply(el.matrix()));
     });
-    removeGroup(this.draw, this.gg);
+    removeGroup(this.draw, this.g);
     this.setGroup(false);
   };
   clickItem = (item: Container) => {
-    this.gg = item;
+    this.g = item;
   };
   insertRect() {
     return new Rectangle(
