@@ -1,9 +1,5 @@
 import { Container, Shape, Svg } from "@svgdotjs/svg.js";
-import {
-  removeSelector,
-  removeShapeGroup,
-  removeGroupSelector,
-} from "./remove";
+import { removeSelector, removeGroupSelector } from "./remove";
 import { dragAndDrop } from "../components/DragAndDrop";
 import "../css/clickItem.css";
 
@@ -29,6 +25,8 @@ export const clickGroup = (
   });
 
   const makeController = () => {
+    document.querySelector(".gclone")?.remove();
+
     const clone = draw
       .rect(Number(group.width()), Number(group.height()))
       .x(group.x())
@@ -57,7 +55,7 @@ export const clickGroup = (
     const rotate = group
       .circle(20)
       .cx(cx)
-      .cy(cy - Number(clone.height()) / 1.2)
+      .cy(y1 - 50)
       .addClass("rotate")
       .attr({ fill: "#CCCCFF" })
       .transform(group.transform())
@@ -85,8 +83,8 @@ export const clickGroup = (
         group.transform(clone.transform());
         rotate.show();
         rotate
-          .cx(group.cx())
-          .cy(group.cy() - Number(clone.height()) / 1.2)
+          .cx(cx)
+          .cy(y1 - 50)
           .transform(group.transform());
         draw.off("mousemove", moveHandler as EventListener);
         draw.off("mouseup", upHandler);
@@ -164,6 +162,5 @@ export const clickGroup = (
     };
     return remove;
   };
-  removeShapeGroup(group, setGroup);
   controller = makeController();
 };
