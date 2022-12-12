@@ -39,10 +39,10 @@ export const clickItem = (
     }
     removeSelector();
     dragAndDrop(g, draw, e, controller, makeController);
-    LocalStorage.setItem(item.dom, item);
   });
 
   const makeController = () => {
+    LocalStorage.setItem(item.dom, item);
     const clone = item
       .clone()
       .stroke("#66666699")
