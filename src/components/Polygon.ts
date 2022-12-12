@@ -8,7 +8,7 @@ export default class Polygon {
     this.render();
   }
   render() {
-    const [draw, setShape, setGroup, multipleSelection, index] = this.props;
+    const [draw, setGroup, setShape, multipleSelection, index] = this.props;
     const random = Math.floor(Math.random() * colorData.length);
     const x = Math.random() * 1000 + 50;
     const y = Math.random() * 400 + 50;
@@ -34,7 +34,6 @@ export default class Polygon {
         .attr({ fill: element.fill });
     } else {
       polygon.plot(point).setData(index).attr({ fill: colorData[random] });
-      console.log(polygon.node.attributes.points.nodeValue);
       localStorage.setItem(
         index,
         JSON.stringify({
@@ -45,7 +44,6 @@ export default class Polygon {
         })
       );
     }
-
     polygon.click((e: MouseEvent) => {
       removeGroupSelector(draw);
       if (e.shiftKey) {

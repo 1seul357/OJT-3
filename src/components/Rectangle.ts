@@ -8,7 +8,7 @@ export default class Rectangle {
     this.render();
   }
   render() {
-    const [draw, setShape, setGroup, multipleSelection, index] = this.props;
+    const [draw, setGroup, setShape, multipleSelection, index] = this.props;
     const random = Math.floor(Math.random() * colorData.length);
     const element = this.element;
     let rect = draw.rect();

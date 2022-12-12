@@ -22,11 +22,10 @@ export const clickItem = (
     .setData(item.dom)
     .fill("transparent")
     .addClass("g");
-
   let controller: () => void;
   removeSelector();
   setShape(item);
-
+  console.log(item.dom);
   g.mousedown((e: MouseEvent) => {
     setShape(item);
     removeGroupSelector(draw);

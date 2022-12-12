@@ -22,7 +22,7 @@ class SVGController {
   group: Container;
   g: Container;
   index: number;
-  props: any;
+  props;
 
   constructor(
     element: SVGSVGElement,
@@ -128,15 +128,12 @@ const Index = () => {
       setGroup,
       setShape
     );
+    if (localStorage.length === 1) {
+      localStorage.setItem("index", String(0));
+    }
     for (let index = 1; index < 30; index++) {
       const element = JSON.parse(localStorage.getItem(String(index)) || "{}");
-      if (element.type === "rect") {
-        handleClick("rect", element);
-      } else if (element.type === "circle") {
-        handleClick("circle", element);
-      } else if (element.type === "polygon") {
-        handleClick("polygon", element);
-      }
+      handleClick(element.type, element);
     }
   }, []);
 

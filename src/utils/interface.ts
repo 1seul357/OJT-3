@@ -1,3 +1,5 @@
+import { Svg } from "@svgdotjs/svg.js";
+
 export interface dataType {
   index: number;
   width: number;
@@ -6,4 +8,12 @@ export interface dataType {
   y: number;
   point?: string;
   fill: string;
+}
+
+export interface propsType {
+  draw: Svg;
+  setGroup: Function;
+  setShape: Function;
+  multipleSelection: Function;
+  index: any;
 }
