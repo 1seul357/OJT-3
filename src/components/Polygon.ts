@@ -32,9 +32,14 @@ export default class Polygon {
       polygon
         .plot(element.point)
         .setData(element.index)
+        .transform(element.transform)
         .attr({ fill: element.fill });
     } else {
-      polygon.plot(point).setData(index).attr({ fill: colorData[random] });
+      polygon
+        .plot(point)
+        .setData(index)
+        .transform(0)
+        .attr({ fill: colorData[random] });
       LocalStorage.setItem(index, polygon);
     }
     polygon.click((e: MouseEvent) => {

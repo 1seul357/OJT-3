@@ -11,6 +11,7 @@ function setItem(key: string, value: Shape) {
           height: value.height(),
           x: value.x(),
           y: value.y(),
+          transform: value.transform(),
           fill: value.fill(),
         })
       : value.type === "circle"
@@ -20,12 +21,14 @@ function setItem(key: string, value: Shape) {
           width: value.width(),
           x: value.x(),
           y: value.y(),
+          transform: value.transform(),
           fill: value.fill(),
         })
       : JSON.stringify({
           type: "polygon",
           index: value.dom,
           point: value.plot(),
+          transform: value.transform(),
           fill: value.fill(),
         })
   );

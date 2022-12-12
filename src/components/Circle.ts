@@ -20,6 +20,7 @@ export default class Circle {
         .x(element.x)
         .y(element.y)
         .setData(element.index)
+        .transform(element.transform)
         .attr({ fill: element.fill });
     } else {
       circle
@@ -27,6 +28,7 @@ export default class Circle {
         .x(Math.random() * 1000 + 50)
         .y(Math.random() * 400 + 50)
         .setData(index)
+        .transform(0)
         .attr({ fill: colorData[random] });
       LocalStorage.setItem(index, circle);
     }

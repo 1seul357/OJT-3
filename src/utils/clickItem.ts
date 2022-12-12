@@ -107,6 +107,7 @@ export const clickItem = (
           .cx(cx)
           .cy(y1 - 50)
           .transform(item.transform());
+        LocalStorage.setItem(item.dom, item);
         draw.off("mousemove", moveHandler as EventListener);
         draw.off("mouseup", upHandler);
       };

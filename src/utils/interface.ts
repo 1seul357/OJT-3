@@ -7,6 +7,7 @@ export interface dataType {
   x: number;
   y: number;
   point?: string;
+  transform?: any;
   fill: string;
 }
 
