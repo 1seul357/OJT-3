@@ -2,6 +2,7 @@ import { clickItem } from "../utils/clickItem";
 import { colorData } from "../utils/data";
 import { removeGroupSelector } from "../utils/remove";
 import { dataType } from "../utils/interface";
+import LocalStorage from "../utils/localStorage";
 
 export default class Circle {
   constructor(public props: any, public element?: dataType) {
@@ -27,17 +28,7 @@ export default class Circle {
         .y(Math.random() * 400 + 50)
         .setData(index)
         .attr({ fill: colorData[random] });
-      localStorage.setItem(
-        index,
-        JSON.stringify({
-          type: "circle",
-          index: index,
-          width: circle.width(),
-          x: circle.x(),
-          y: circle.y(),
-          fill: circle.fill(),
-        })
-      );
+      LocalStorage.setItem(index, circle);
     }
 
     circle.click((e: MouseEvent) => {

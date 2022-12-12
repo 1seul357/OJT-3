@@ -7,6 +7,7 @@ import {
 } from "./remove";
 import { dragAndDrop } from "../components/DragAndDrop";
 import "../css/clickItem.css";
+import LocalStorage from "../utils/localStorage";
 
 export const clickItem = (
   item: Shape,
@@ -25,7 +26,7 @@ export const clickItem = (
   let controller: () => void;
   removeSelector();
   setShape(item);
-  console.log(item.dom);
+
   g.mousedown((e: MouseEvent) => {
     setShape(item);
     removeGroupSelector(draw);
@@ -38,6 +39,7 @@ export const clickItem = (
     }
     removeSelector();
     dragAndDrop(g, draw, e, controller, makeController);
+    LocalStorage.setItem(item.dom, item);
   });
 
   const makeController = () => {
@@ -179,6 +181,7 @@ export const clickItem = (
           };
           const upHandler = () => {
             item.size(clone.width(), clone.height()).x(clone.x()).y(clone.y());
+            LocalStorage.setItem(item.dom, item);
             remove();
             draw.off("mousemove", moveHandler as EventListener);
             draw.off("mouseup", upHandler);

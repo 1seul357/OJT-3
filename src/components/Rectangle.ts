@@ -2,6 +2,7 @@ import { clickItem } from "../utils/clickItem";
 import { colorData } from "../utils/data";
 import { removeGroupSelector } from "../utils/remove";
 import { dataType } from "../utils/interface";
+import LocalStorage from "../utils/localStorage";
 
 export default class Rectangle {
   constructor(public props: any, public element?: dataType) {
@@ -29,18 +30,7 @@ export default class Rectangle {
         .y(Math.random() * 400 + 50)
         .setData(index)
         .attr({ fill: colorData[random] });
-      localStorage.setItem(
-        index,
-        JSON.stringify({
-          type: "rect",
-          index: index,
-          width: rect.width(),
-          height: rect.height(),
-          x: rect.x(),
-          y: rect.y(),
-          fill: rect.fill(),
-        })
-      );
+      LocalStorage.setItem(index, rect);
     }
 
     rect.click((e: MouseEvent) => {

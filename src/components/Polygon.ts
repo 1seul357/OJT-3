@@ -2,6 +2,7 @@ import { clickItem } from "../utils/clickItem";
 import { colorData } from "../utils/data";
 import { removeGroupSelector } from "../utils/remove";
 import { dataType } from "../utils/interface";
+import LocalStorage from "../utils/localStorage";
 
 export default class Polygon {
   constructor(public props: any, public element?: dataType) {
@@ -34,15 +35,7 @@ export default class Polygon {
         .attr({ fill: element.fill });
     } else {
       polygon.plot(point).setData(index).attr({ fill: colorData[random] });
-      localStorage.setItem(
-        index,
-        JSON.stringify({
-          type: "polygon",
-          index: index,
-          point: polygon.node.attributes.points.nodeValue,
-          fill: polygon.fill(),
-        })
-      );
+      LocalStorage.setItem(index, polygon);
     }
     polygon.click((e: MouseEvent) => {
       removeGroupSelector(draw);
