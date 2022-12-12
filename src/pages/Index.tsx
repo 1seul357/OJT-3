@@ -15,17 +15,15 @@ import ColorList from "../components/ColorList";
 import { dragItem } from "../components/Drag";
 import { clickGroup } from "../utils/clickGroup";
 import { Select } from "../components/Select";
-// [
-//   {
-//     type: "group",
-//     transform: "matrix(1,0,0,1,150,150)",
-//     children: [{ type: "rect", x: 10, y: 10 }],
-//   },
-// ];
+import { dataType } from "../utils/interface";
+
 class SVGController {
   draw: Svg;
   group: Container;
   g: Container;
+  index: number;
+  props: any;
+
   constructor(
     element: SVGSVGElement,
     public setGroup: Function,
@@ -34,6 +32,14 @@ class SVGController {
     this.draw = SVG(element).size(1200, 750).addClass("svg");
     this.group = this.draw.group();
     this.g = this.draw.group();
+    this.index = Number(localStorage.getItem("index"));
+    this.props = [
+      this.draw,
+      this.setGroup,
+      this.setShape,
+      this.multipleSelection,
+      this.index,
+    ];
     this.render();
   }
   multipleSelection = (item: Svg) => {
@@ -65,29 +71,21 @@ class SVGController {
   clickItem = (item: Container) => {
     this.g = item;
   };
-  insertRect() {
-    return new Rectangle(
-      this.draw,
-      this.setShape,
-      this.setGroup,
-      this.multipleSelection
-    );
-  }
-  insertCircle() {
-    return new Circle(
-      this.draw,
-      this.setShape,
-      this.setGroup,
-      this.multipleSelection
-    );
-  }
-  insertPolygon() {
-    return new Polygon(
-      this.draw,
-      this.setShape,
-      this.setGroup,
-      this.multipleSelection
-    );
+  insertRect(type: string, element?: dataType) {
+    if (element === undefined) {
+      this.index += 1;
+      this.props[4] = this.index;
+      localStorage.setItem("index", String(this.index));
+    }
+    if (type === "rect") {
+      return new Rectangle(this.props, element);
+    }
+    if (type === "circle") {
+      return new Circle(this.props, element);
+    }
+    if (type === "polygon") {
+      return new Polygon(this.props, element);
+    }
   }
   render() {
     const svg = document.querySelector("svg");
@@ -114,14 +112,8 @@ const Index = () => {
   const [shape, setShape] = useState<Object>();
   const [group, setGroup] = useState<boolean | null>(false);
 
-  const handleRectClick = () => {
-    controller.current?.insertRect();
-  };
-  const handlePolygonClick = () => {
-    controller.current?.insertPolygon();
-  };
-  const handleCircleClick = () => {
-    controller.current?.insertCircle();
+  const handleClick = (type: string, element?: dataType) => {
+    controller.current?.insertRect(type, element);
   };
   const makeGroup = () => {
     controller.current?.makeGrouping();
@@ -136,6 +128,16 @@ const Index = () => {
       setGroup,
       setShape
     );
+    for (let index = 1; index < 30; index++) {
+      const element = JSON.parse(localStorage.getItem(String(index)) || "{}");
+      if (element.type === "rect") {
+        handleClick("rect", element);
+      } else if (element.type === "circle") {
+        handleClick("circle", element);
+      } else if (element.type === "polygon") {
+        handleClick("polygon", element);
+      }
+    }
   }, []);
 
   return (
@@ -144,17 +146,20 @@ const Index = () => {
         color="secondary"
         variant="outlined"
         size="large"
-        onClick={handleRectClick}>
+        onClick={() => handleClick("rect")}>
         Rectangle
       </Button>
-      <Button variant="outlined" size="large" onClick={handleCircleClick}>
+      <Button
+        variant="outlined"
+        size="large"
+        onClick={() => handleClick("circle")}>
         Circle
       </Button>
       <Button
         color="error"
         variant="outlined"
         size="large"
-        onClick={handlePolygonClick}>
+        onClick={() => handleClick("polygon")}>
         Polygon
       </Button>
       {group === false ? (

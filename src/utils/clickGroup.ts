@@ -169,5 +169,5 @@ export const clickGroup = (
     return remove;
   };
   controller = makeController();
-  removeItem(g);
+  removeItem(g, setGroup);
 };

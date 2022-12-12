@@ -16,7 +16,13 @@ export const clickItem = (
   setGroup: Function
 ) => {
   removeG(draw);
-  const g = draw.group().add(item).fill("transparent").addClass("g");
+  const g = draw
+    .group()
+    .add(item)
+    .setData(item.dom)
+    .fill("transparent")
+    .addClass("g");
+
   let controller: () => void;
   removeSelector();
   setShape(item);
@@ -71,8 +77,8 @@ export const clickItem = (
       .cx(cx)
       .cy(y1 - 50)
       .addClass("rotate")
-      .attr({ fill: "#CCCCFF" })
-      .matrix(item.matrix());
+      .transform(item.transform())
+      .attr({ fill: "#CCCCFF" });
 
     rotate.on("mousedown", (e) => {
       e.stopPropagation();
@@ -192,5 +198,5 @@ export const clickItem = (
     return remove;
   };
   controller = makeController();
-  removeItem(g);
+  removeItem(g, setGroup);
 };
