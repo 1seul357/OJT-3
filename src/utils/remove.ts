@@ -55,7 +55,6 @@ const removeItem = (g: Container, setGroup: Function) => {
   window.addEventListener("keyup", (e) => {
     if (e.key === "Delete") {
       if (g.node.childElementCount >= 4) {
-        localStorage.removeItem(g.dom);
         g.remove();
         setGroup(false);
       }

@@ -2,7 +2,6 @@ import { Shape, Svg } from "@svgdotjs/svg.js";
 import remove from "./remove";
 import { dragAndDrop } from "../components/DragAndDrop";
 import "../css/clickItem.css";
-import LocalStorage from "../utils/localStorage";
 
 export const clickItem = (
   item: Shape,
@@ -37,7 +36,6 @@ export const clickItem = (
   });
 
   const makeController = () => {
-    LocalStorage.setItem(item.dom, item);
     const clone = item
       .clone()
       .stroke("#66666699")
@@ -102,7 +100,6 @@ export const clickItem = (
           .cx(cx)
           .cy(y1 - 50)
           .transform(item.transform());
-        LocalStorage.setItem(item.dom, item);
         draw.off("mousemove", moveHandler as EventListener);
         draw.off("mouseup", upHandler);
       };
@@ -177,7 +174,6 @@ export const clickItem = (
           };
           const upHandler = () => {
             item.size(clone.width(), clone.height()).x(clone.x()).y(clone.y());
-            LocalStorage.setItem(item.dom, item);
             remove();
             draw.off("mousemove", moveHandler as EventListener);
             draw.off("mouseup", upHandler);

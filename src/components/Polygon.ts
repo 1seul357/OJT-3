@@ -2,9 +2,9 @@ import { clickItem } from "../utils/clickItem";
 import { colorData } from "../utils/data";
 import remove from "../utils/remove";
 import { dataType } from "../utils/interface";
-import LocalStorage from "../utils/localStorage";
 
 export default class Polygon {
+  polygon;
   constructor(public props: any, public element?: dataType) {
     this.render();
   }
@@ -14,7 +14,7 @@ export default class Polygon {
     const x = Math.random() * 1000 + 50;
     const y = Math.random() * 400 + 50;
     const element = this.element;
-    let polygon = draw.polygon();
+    this.polygon = draw.polygon();
     const point =
       x +
       "," +
@@ -29,29 +29,34 @@ export default class Polygon {
       (y + 75);
 
     if (element) {
-      polygon
+      this.polygon
         .plot(element.point)
         .setData(element.index)
+        .addClass("item")
         .transform(element.transform)
         .attr({ fill: element.fill });
+      this.return();
     } else {
-      polygon
+      this.polygon
         .plot(point)
         .setData(index)
+        .addClass("item")
         .transform(0)
         .attr({ fill: colorData[random] });
-      LocalStorage.setItem(index, polygon);
     }
-    polygon.click((e: MouseEvent) => {
+    this.polygon.click((e: MouseEvent) => {
       remove.removeGroupSelector(draw);
       if (e.shiftKey) {
-        multipleSelection(polygon);
+        multipleSelection(this.polygon);
         return;
       }
       if (document.querySelector(".grouping")) {
         setGroup(null);
       }
-      clickItem(polygon, draw, multipleSelection, setShape, setGroup);
+      clickItem(this.polygon, draw, multipleSelection, setShape, setGroup);
     });
+  }
+  return() {
+    return this.polygon;
   }
 }
