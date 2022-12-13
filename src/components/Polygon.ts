@@ -2,19 +2,30 @@ import { clickItem } from "../utils/clickItem";
 import { colorData } from "../utils/data";
 import remove from "../utils/remove";
 import { dataType } from "../utils/interface";
+import { Svg } from "@svgdotjs/svg.js";
 
 export default class Polygon {
   polygon;
-  constructor(public props: any, public element?: dataType) {
+  constructor(
+    public draw: Svg,
+    public setGroup: Function,
+    public setShape: Function,
+    public multipleSelection: Function,
+    public element?: dataType
+  ) {
+    this.polygon = draw.polygon();
     this.render();
   }
   render() {
-    const [draw, setGroup, setShape, multipleSelection, index] = this.props;
+    const draw = this.draw;
+    const setGroup = this.setGroup;
+    const setShape = this.setShape;
+    const multipleSelection = this.multipleSelection;
     const random = Math.floor(Math.random() * colorData.length);
     const x = Math.random() * 1000 + 50;
     const y = Math.random() * 400 + 50;
     const element = this.element;
-    this.polygon = draw.polygon();
+
     const point =
       x +
       "," +
@@ -31,7 +42,6 @@ export default class Polygon {
     if (element) {
       this.polygon
         .plot(element.point)
-        .setData(element.index)
         .addClass("item")
         .transform(element.transform)
         .attr({ fill: element.fill });
@@ -39,9 +49,7 @@ export default class Polygon {
     } else {
       this.polygon
         .plot(point)
-        .setData(index)
         .addClass("item")
-        .transform(0)
         .attr({ fill: colorData[random] });
     }
     this.polygon.click((e: MouseEvent) => {

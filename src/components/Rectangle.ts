@@ -2,17 +2,27 @@ import { clickItem } from "../utils/clickItem";
 import { colorData } from "../utils/data";
 import remove from "../utils/remove";
 import { dataType } from "../utils/interface";
+import { Svg } from "@svgdotjs/svg.js";
 
 export default class Rectangle {
   rect;
-  constructor(public props: any, public element?: dataType) {
+  constructor(
+    public draw: Svg,
+    public setGroup: Function,
+    public setShape: Function,
+    public multipleSelection: Function,
+    public element?: dataType
+  ) {
+    this.rect = draw.rect();
     this.render();
   }
   render() {
-    const [draw, setGroup, setShape, multipleSelection, index] = this.props;
+    const draw = this.draw;
+    const setGroup = this.setGroup;
+    const setShape = this.setShape;
+    const multipleSelection = this.multipleSelection;
     const random = Math.floor(Math.random() * colorData.length);
     const element = this.element;
-    this.rect = draw.rect();
 
     if (element) {
       this.rect
@@ -20,7 +30,6 @@ export default class Rectangle {
         .height(element.height)
         .x(element.x)
         .y(element.y)
-        .setData(element.index)
         .addClass("item")
         .transform(element.transform)
         .attr({ fill: element.fill });
@@ -31,9 +40,7 @@ export default class Rectangle {
         .height(150)
         .x(Math.random() * 1000 + 50)
         .y(Math.random() * 400 + 50)
-        .setData(index)
         .addClass("item")
-        .transform(0)
         .attr({ fill: colorData[random] });
     }
 

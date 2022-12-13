@@ -1,6 +1,6 @@
-import { Container, Svg, SVG } from "@svgdotjs/svg.js";
+import { Container, Shape, Svg, SVG } from "@svgdotjs/svg.js";
 import "@svgdotjs/svg.draggable.js";
-import { Children, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "@mui/material/Button";
 import Rectangle from "../components/Rectangle";
 import Circle from "../components/Circle";
@@ -17,8 +17,6 @@ class SVGController {
   draw: Svg;
   group: Container;
   g: Container;
-  index;
-  props;
 
   constructor(
     element: SVGSVGElement,
@@ -28,17 +26,9 @@ class SVGController {
     this.draw = SVG(element).size(1200, 750).addClass("svg");
     this.group = this.draw.group();
     this.g = this.draw.group();
-    this.index = Number(LocalStorage.getItem("index"));
-    this.props = [
-      this.draw,
-      this.setGroup,
-      this.setShape,
-      this.multipleSelection,
-      this.index,
-    ];
     this.render();
   }
-  multipleSelection = (item: Svg) => {
+  multipleSelection = (item: Shape) => {
     remove.removeSelector();
     this.setGroup(false);
     this.group.add(item).addClass("group");
@@ -53,8 +43,7 @@ class SVGController {
       this.setGroup(true);
       document.querySelectorAll(".select").forEach((node) => node.remove());
       const select = Select(this.draw, this.g, "gselect");
-      this.index += 1;
-      this.g.add(select).addClass("grouping").setData(this.index);
+      this.g.add(select).addClass("grouping");
       this.g.children().forEach((element) => {
         element.removeClass("item");
       });
@@ -75,77 +64,46 @@ class SVGController {
     const arr: any = [];
 
     groups.forEach((el) => {
-      el.children().forEach((element: any) => {
-        if (typeof element.dom != "number") return;
-        arr.push(
-          element.type === "rect"
-            ? {
-                type: "rect",
-                index: element.dom,
-                width: element.width(),
-                height: element.height(),
-                x: element.x(),
-                y: element.y(),
-                transform: element.transform(),
-                fill: element.fill(),
-              }
-            : element.type === "circle"
-            ? {
-                type: "circle",
-                index: element.dom,
-                width: element.width(),
-                x: element.x(),
-                y: element.y(),
-                transform: element.transform(),
-                fill: element.fill(),
-              }
-            : {
-                type: "polygon",
-                index: element.dom,
-                point: element.plot(),
-                transform: element.transform(),
-                fill: element.fill(),
-              }
-        );
+      el.children().forEach((element) => {
+        if (element.hasClass("gclone") || element.hasClass("gselect")) return;
+        arr.push({
+          type:
+            element.type === "rect"
+              ? "rect"
+              : element.type === "circle"
+              ? "circle"
+              : "polygon",
+          width: element.width(),
+          height: element.height(),
+          x: element.x(),
+          y: element.y(),
+          point: element.plot(),
+          transform: element.transform(),
+          fill: element.fill(),
+        });
       });
       array.push({
         type: "g",
-        index: this.index,
         children: arr,
       });
     });
-    items.forEach((element: any) => {
-      if (typeof element.dom != "number") return;
-      array.push(
-        element.type === "rect"
-          ? {
-              type: "rect",
-              index: element.dom,
-              width: element.width(),
-              height: element.height(),
-              x: element.x(),
-              y: element.y(),
-              transform: element.transform(),
-              fill: element.fill(),
-            }
-          : element.type === "circle"
-          ? {
-              type: "circle",
-              index: element.dom,
-              width: element.width(),
-              x: element.x(),
-              y: element.y(),
-              transform: element.transform(),
-              fill: element.fill(),
-            }
-          : {
-              type: "polygon",
-              index: element.dom,
-              point: element.plot(),
-              transform: element.transform(),
-              fill: element.fill(),
-            }
-      );
+    items.forEach((element) => {
+      if (element.hasClass("clone")) return;
+      array.push({
+        type:
+          element.type === "rect"
+            ? "rect"
+            : element.type === "circle"
+            ? "circle"
+            : "polygon",
+        width: element.width(),
+        height: element.height(),
+        x: element.x(),
+        y: element.y(),
+        point: element.plot(),
+        transform: element.transform(),
+        fill: element.fill(),
+      });
     });
     LocalStorage.setItem("items", array);
   };
@@ -153,21 +111,34 @@ class SVGController {
     this.g = item;
   };
   insertRect(type: string, element?: dataType) {
-    if (element === undefined) {
-      this.index += 1;
-      this.props[4] = this.index;
-      localStorage.setItem("index", String(this.index));
-    }
     if (type === "rect") {
-      const item = new Rectangle(this.props, element);
+      const item = new Rectangle(
+        this.draw,
+        this.setGroup,
+        this.setShape,
+        this.multipleSelection,
+        element
+      );
       return item.return();
     }
     if (type === "circle") {
-      const item = new Circle(this.props, element);
+      const item = new Circle(
+        this.draw,
+        this.setGroup,
+        this.setShape,
+        this.multipleSelection,
+        element
+      );
       return item.return();
     }
     if (type === "polygon") {
-      const item = new Polygon(this.props, element);
+      const item = new Polygon(
+        this.draw,
+        this.setGroup,
+        this.setShape,
+        this.multipleSelection,
+        element
+      );
       return item.return();
     }
   }
@@ -205,7 +176,7 @@ const Index = () => {
   const makeUnGroup = () => {
     controller.current?.makeUnGrouping();
   };
-  const multipleSelection = (element: Svg) => {
+  const multipleSelection = (element: Shape) => {
     controller.current?.multipleSelection(element);
   };
   const makeGrouping = () => {
@@ -221,16 +192,15 @@ const Index = () => {
       setGroup,
       setShape
     );
-    if (localStorage.length === 1) {
-      localStorage.setItem("index", String(0));
-    }
     const items = JSON.parse(LocalStorage.getItem("items") || "{}");
     for (let index = 0; index < items?.length; index++) {
       const item = items[index];
       if (item.type === "g") {
-        item.children.forEach((el: any) => {
+        item.children.forEach((el) => {
           const item = handleClick(el.type, el);
-          multipleSelection(item);
+          if (item instanceof Shape) {
+            multipleSelection(item);
+          }
         });
         makeGrouping();
       } else {
