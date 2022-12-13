@@ -1,10 +1,5 @@
 import { Shape, Svg } from "@svgdotjs/svg.js";
-import {
-  removeSelector,
-  removeGroupSelector,
-  removeItem,
-  removeG,
-} from "./remove";
+import remove from "./remove";
 import { dragAndDrop } from "../components/DragAndDrop";
 import "../css/clickItem.css";
 import LocalStorage from "../utils/localStorage";
@@ -16,7 +11,7 @@ export const clickItem = (
   setShape: Function,
   setGroup: Function
 ) => {
-  removeG(draw);
+  remove.removeG(draw);
   const g = draw
     .group()
     .add(item)
@@ -24,12 +19,12 @@ export const clickItem = (
     .fill("transparent")
     .addClass("g");
   let controller: () => void;
-  removeSelector();
+  remove.removeSelector();
   setShape(item);
 
   g.mousedown((e: MouseEvent) => {
     setShape(item);
-    removeGroupSelector(draw);
+    remove.removeGroupSelector(draw);
     if (document.querySelector(".grouping")) {
       setGroup(null);
     }
@@ -37,7 +32,7 @@ export const clickItem = (
       multipleSelection(item);
       return;
     }
-    removeSelector();
+    remove.removeSelector();
     dragAndDrop(g, draw, e, controller, makeController);
   });
 
@@ -201,5 +196,5 @@ export const clickItem = (
     return remove;
   };
   controller = makeController();
-  removeItem(g, setGroup);
+  remove.removeItem(g, setGroup);
 };

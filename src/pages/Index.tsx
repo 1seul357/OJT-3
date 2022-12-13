@@ -5,17 +5,13 @@ import Button from "@mui/material/Button";
 import Rectangle from "../components/Rectangle";
 import Circle from "../components/Circle";
 import Polygon from "../components/Polygon";
-import {
-  removeSelector,
-  removeGroup,
-  removeSelect,
-  removeGroupSelector,
-} from "../utils/remove";
+import remove from "../utils/remove";
 import ColorList from "../components/ColorList";
 import { dragItem } from "../components/Drag";
 import { clickGroup } from "../utils/clickGroup";
 import { Select } from "../components/Select";
 import { dataType } from "../utils/interface";
+import LocalStorage from "../utils/localStorage";
 
 class SVGController {
   draw: Svg;
@@ -32,7 +28,7 @@ class SVGController {
     this.draw = SVG(element).size(1200, 750).addClass("svg");
     this.group = this.draw.group();
     this.g = this.draw.group();
-    this.index = Number(localStorage.getItem("index"));
+    this.index = Number(LocalStorage.getItem("index"));
     this.props = [
       this.draw,
       this.setGroup,
@@ -43,7 +39,7 @@ class SVGController {
     this.render();
   }
   multipleSelection = (item: Svg) => {
-    removeSelector();
+    remove.removeSelector();
     this.setGroup(false);
     this.group.add(item).addClass("group");
     const select = Select(this.draw, this.group, "select");
@@ -65,7 +61,7 @@ class SVGController {
     this.g.children().forEach((el) => {
       el.matrix(this.g.matrix().multiply(el.matrix()));
     });
-    removeGroup(this.draw, this.g);
+    remove.removeGroup(this.draw, this.g);
     this.setGroup(false);
   };
   clickItem = (item: Container) => {
@@ -96,8 +92,8 @@ class SVGController {
         e.target instanceof SVGPolygonElement
       )
         return;
-      removeSelect(this.draw);
-      removeGroupSelector(this.draw);
+      remove.removeSelect(this.draw);
+      remove.removeGroupSelector(this.draw);
 
       if (document.querySelector(".gselect")) {
         this.setGroup(null);
@@ -132,7 +128,7 @@ const Index = () => {
       localStorage.setItem("index", String(0));
     }
     for (let index = 1; index < 30; index++) {
-      const element = JSON.parse(localStorage.getItem(String(index)) || "{}");
+      const element = JSON.parse(LocalStorage.getItem(String(index)) || "{}");
       handleClick(element.type, element);
     }
   }, []);

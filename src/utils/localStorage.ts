@@ -1,6 +1,11 @@
 import { Shape } from "@svgdotjs/svg.js";
 
-function setItem(key: string, value: Shape) {
+const getItem = (key: string) => {
+  const value = localStorage.getItem(key);
+  return value;
+};
+
+const setItem = (key: string, value: Shape) => {
   localStorage.setItem(
     key,
     value.type === "rect"
@@ -32,6 +37,6 @@ function setItem(key: string, value: Shape) {
           fill: value.fill(),
         })
   );
-}
+};
 
-export default { setItem };
+export default { getItem, setItem };

@@ -1,6 +1,6 @@
 import { clickItem } from "../utils/clickItem";
 import { colorData } from "../utils/data";
-import { removeGroupSelector } from "../utils/remove";
+import remove from "../utils/remove";
 import { dataType } from "../utils/interface";
 import LocalStorage from "../utils/localStorage";
 
@@ -34,7 +34,7 @@ export default class Circle {
     }
 
     circle.click((e: MouseEvent) => {
-      removeGroupSelector(draw);
+      remove.removeGroupSelector(draw);
       if (e.shiftKey) {
         multipleSelection(circle);
         return;

@@ -1,25 +1,25 @@
 import { Container, Svg } from "@svgdotjs/svg.js";
 
-export const removeGrouping = () => {
+const removeGrouping = () => {
   document.querySelectorAll(".select").forEach((node) => node.remove());
   document.querySelector(".gclone")?.remove();
   document.querySelector(".gselect")?.remove();
 };
 
-export const removeSelector = () => {
+const removeSelector = () => {
   document.querySelectorAll(".circles").forEach((node) => node.remove());
   document.querySelectorAll(".rotate").forEach((node) => node.remove());
   document.querySelector(".clone")?.remove();
 };
 
-export const removeSelect = (draw: Svg) => {
+const removeSelect = (draw: Svg) => {
   document.querySelectorAll(".select").forEach((node) => node.remove());
   document.querySelectorAll(".circles").forEach((node) => node.remove());
   document.querySelectorAll(".rotate").forEach((node) => node.remove());
   document.querySelector(".clone")?.remove();
 };
 
-export const removeG = (draw: Svg) => {
+const removeG = (draw: Svg) => {
   draw.find(".g").forEach((node) => {
     if (node.node.childElementCount === 0) {
       node.remove();
@@ -27,7 +27,7 @@ export const removeG = (draw: Svg) => {
   });
 };
 
-export const removeGroup = (draw: Svg, gg: Container) => {
+const removeGroup = (draw: Svg, gg: Container) => {
   gg.findOne(".gselect")?.remove();
   gg?.children().forEach((node) => {
     node.addTo(draw);
@@ -39,7 +39,7 @@ export const removeGroup = (draw: Svg, gg: Container) => {
   removeSelector();
 };
 
-export const removeGroupSelector = (draw: Svg) => {
+const removeGroupSelector = (draw: Svg) => {
   draw
     .find(".gselect")
     ?.forEach((node) => node.attr({ fill: "none", stroke: "none" }));
@@ -51,7 +51,7 @@ export const removeGroupSelector = (draw: Svg) => {
   }
 };
 
-export const removeItem = (g: Container, setGroup: Function) => {
+const removeItem = (g: Container, setGroup: Function) => {
   window.addEventListener("keyup", (e) => {
     if (e.key === "Delete") {
       if (g.node.childElementCount >= 4) {
@@ -61,4 +61,14 @@ export const removeItem = (g: Container, setGroup: Function) => {
       }
     }
   });
+};
+
+export default {
+  removeGrouping,
+  removeSelector,
+  removeSelect,
+  removeG,
+  removeGroup,
+  removeGroupSelector,
+  removeItem,
 };
