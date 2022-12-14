@@ -1,10 +1,13 @@
 import { colorData } from "../utils/data";
+import { Svg } from "@svgdotjs/svg.js";
 import "../css/color.css";
 
-const ColorList = (selectItem: any) => {
-  const { item } = selectItem;
+export interface itemType {
+  item: undefined | Svg;
+}
+const ColorList = ({ item }: itemType) => {
   const updateColor = (colorName: string) => {
-    item.attr({ fill: colorName });
+    item?.attr({ fill: colorName });
   };
 
   return (

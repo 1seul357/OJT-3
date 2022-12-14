@@ -176,6 +176,7 @@ const Index = () => {
       const item = items[index];
       if (item.type === "g") {
         item.children.forEach((el) => {
+          console.log(el);
           const item = handleClick(el.type, el);
           if (item instanceof Shape) {
             multipleSelection(item);

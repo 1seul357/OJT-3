@@ -32,7 +32,7 @@ const Modal = ({ setName }: propType) => {
           <TextField
             label="Name"
             id="standard-size-normal"
-            defaultValue="Normal"
+            // defaultValue="Normal"
             variant="standard"
             value={textValue}
             onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
