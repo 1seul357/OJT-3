@@ -17,6 +17,7 @@ export const clickGroup = (
   select.attr({ fill: "#ffffff66" }).stroke({ color: "#00000099" });
 
   g.mousedown((e: MouseEvent) => {
+    controller = makeController();
     setGroup(true);
     clickItem(group);
     remove.removeSelector();
@@ -81,12 +82,14 @@ export const clickGroup = (
       };
 
       const upHandler = () => {
-        group.transform(clone.transform());
         rotate.show();
         rotate
           .cx(cx)
           .cy(y1 - 50)
-          .transform(group.transform());
+          .transform(clone.transform());
+        group.children().forEach((el) => {
+          el.matrix(clone.matrix().multiply(el.matrix()));
+        });
         draw.off("mousemove", moveHandler as EventListener);
         draw.off("mouseup", upHandler);
       };
@@ -163,6 +166,5 @@ export const clickGroup = (
     };
     return remove;
   };
-  controller = makeController();
   remove.removeItem(g, setGroup);
 };

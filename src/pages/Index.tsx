@@ -12,6 +12,7 @@ import { clickGroup } from "../utils/clickGroup";
 import { Select } from "../components/Select";
 import { dataType } from "../utils/interface";
 import LocalStorage from "../utils/localStorage";
+import { value } from "../utils/value";
 
 class SVGController {
   draw: Svg;
@@ -51,9 +52,6 @@ class SVGController {
     }
   };
   makeUnGrouping = () => {
-    this.g.children().forEach((el) => {
-      el.matrix(this.g.matrix().multiply(el.matrix()));
-    });
     remove.removeGroup(this.draw, this.g);
     this.setGroup(false);
   };
@@ -61,26 +59,12 @@ class SVGController {
     const items = this.draw.find(".item");
     const groups = this.draw.find(".grouping");
     const array: any = [];
-    const arr: any = [];
 
     groups.forEach((el) => {
+      const arr: any = [];
       el.children().forEach((element) => {
         if (element.hasClass("gclone") || element.hasClass("gselect")) return;
-        arr.push({
-          type:
-            element.type === "rect"
-              ? "rect"
-              : element.type === "circle"
-              ? "circle"
-              : "polygon",
-          width: element.width(),
-          height: element.height(),
-          x: element.x(),
-          y: element.y(),
-          point: element.plot(),
-          transform: element.transform(),
-          fill: element.fill(),
-        });
+        arr.push(value(element));
       });
       array.push({
         type: "g",
@@ -89,21 +73,7 @@ class SVGController {
     });
     items.forEach((element) => {
       if (element.hasClass("clone")) return;
-      array.push({
-        type:
-          element.type === "rect"
-            ? "rect"
-            : element.type === "circle"
-            ? "circle"
-            : "polygon",
-        width: element.width(),
-        height: element.height(),
-        x: element.x(),
-        y: element.y(),
-        point: element.plot(),
-        transform: element.transform(),
-        fill: element.fill(),
-      });
+      array.push(value(element));
     });
     LocalStorage.setItem("items", array);
   };
