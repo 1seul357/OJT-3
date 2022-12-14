@@ -81,7 +81,8 @@ class SVGController {
       if (element.hasClass("clone")) return;
       array.push(value(element));
     });
-    LocalStorage.setItem("items", array);
+    const name = JSON.parse(LocalStorage.getItem("name") || "{}");
+    LocalStorage.setItem(name, array);
   };
   clickItem = (item: Container) => {
     this.g = item;
@@ -171,12 +172,12 @@ const Index = () => {
       setGroup,
       setShape
     );
-    const items = JSON.parse(LocalStorage.getItem("items") || "{}");
+    const name = JSON.parse(LocalStorage.getItem("name") || "{}");
+    const items = JSON.parse(LocalStorage.getItem(name) || "{}");
     for (let index = 0; index < items?.length; index++) {
       const item = items[index];
       if (item.type === "g") {
         item.children.forEach((el) => {
-          console.log(el);
           const item = handleClick(el.type, el);
           if (item instanceof Shape) {
             multipleSelection(item);
