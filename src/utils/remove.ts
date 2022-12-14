@@ -30,7 +30,7 @@ const removeG = (draw: Svg) => {
 const removeGroup = (draw: Svg, gg: Container) => {
   gg.findOne(".gselect")?.remove();
   gg?.children().forEach((node) => {
-    node.addTo(draw);
+    node.addTo(draw).addClass("item");
   });
   if (gg?.children().length != 0) {
     removeGroup(draw, gg);
