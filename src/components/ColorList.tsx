@@ -1,10 +1,11 @@
 import { colorData } from "../utils/data";
+import { Shape } from "@svgdotjs/svg.js";
 import "../css/color.css";
 
-const ColorList = (item: any) => {
-  const shape = item.item;
+const ColorList = (selectItem: any) => {
+  const { item } = selectItem;
   const updateColor = (colorName: string) => {
-    shape.attr({ fill: colorName });
+    item.attr({ fill: colorName });
   };
 
   return (

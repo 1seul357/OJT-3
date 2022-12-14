@@ -1,4 +1,4 @@
-import { Container, Shape, Svg, SVG } from "@svgdotjs/svg.js";
+import { Container, List, Shape, Svg, SVG } from "@svgdotjs/svg.js";
 import "@svgdotjs/svg.draggable.js";
 import { useEffect, useRef, useState } from "react";
 import Button from "@mui/material/Button";
@@ -24,7 +24,8 @@ class SVGController {
     public setGroup: Function,
     public setShape: Function
   ) {
-    this.draw = SVG(element).size(1200, 750).addClass("svg");
+    this.draw = SVG(element).addClass("svg");
+    this.draw.viewbox(0, 0, 1200, 750);
     this.group = this.draw.group();
     this.g = this.draw.group();
     this.render();
@@ -166,7 +167,7 @@ const Index = () => {
     for (let index = 0; index < items?.length; index++) {
       const item = items[index];
       if (item.type === "g") {
-        item.children.forEach((el) => {
+        item.children.forEach((el: any) => {
           const item = handleClick(el.type, el);
           if (item instanceof Shape) {
             multipleSelection(item);
