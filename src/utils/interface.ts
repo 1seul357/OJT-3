@@ -1,9 +1,10 @@
+import { NumberAlias } from "@svgdotjs/svg.js";
+
 export interface dataType {
-  index: number;
-  width: number;
-  height: number;
-  x: number;
-  y: number;
+  width: NumberAlias;
+  height: NumberAlias;
+  x: NumberAlias;
+  y: NumberAlias;
   point?: any;
   transform?: any;
   fill: string;

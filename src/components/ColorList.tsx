@@ -1,5 +1,4 @@
 import { colorData } from "../utils/data";
-import { Shape } from "@svgdotjs/svg.js";
 import "../css/color.css";
 
 const ColorList = (selectItem: any) => {
