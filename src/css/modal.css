@@ -1,0 +1,23 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.modalWrapper {
+  position: absolute;
+  display: flex;
+  top: calc(50vh - 25%);
+  left: calc(50vw - 15%);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  height: 45%;
+  border-radius: 1rem;
+  background-color: white;
+  box-shadow: 0 14px 28px rgba(88, 87, 87, 0.753);
+}

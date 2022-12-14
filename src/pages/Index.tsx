@@ -13,6 +13,7 @@ import { Select } from "../components/Select";
 import { dataType } from "../utils/interface";
 import LocalStorage from "../utils/localStorage";
 import { value } from "../utils/value";
+import Modal from "../components/Modal";
 
 class SVGController {
   draw: Svg;
@@ -60,12 +61,12 @@ class SVGController {
     this.setGroup(false);
   };
   onSave = () => {
+    const array: any[] = [];
     const items = this.draw.find(".item");
     const groups = this.draw.find(".grouping");
-    const array: any = [];
 
     groups.forEach((el) => {
-      const arr: any = [];
+      const arr: dataType[] = [];
       el.children().forEach((element) => {
         const matrix = el.matrix().multiply(element.matrix());
         if (element.hasClass("gclone") || element.hasClass("gselect")) return;
@@ -141,6 +142,9 @@ const Index = () => {
   const controller = useRef<SVGController>(); // draw
   const [shape, setShape] = useState<Object>();
   const [group, setGroup] = useState<boolean | null>(false);
+  const [name, setName] = useState<boolean>(
+    LocalStorage.getItem("name") ? true : false
+  );
 
   const handleClick = (type: string, element?: dataType) => {
     return controller.current?.insertRect(type, element);
@@ -171,7 +175,7 @@ const Index = () => {
     for (let index = 0; index < items?.length; index++) {
       const item = items[index];
       if (item.type === "g") {
-        item.children.forEach((el: any) => {
+        item.children.forEach((el) => {
           const item = handleClick(el.type, el);
           if (item instanceof Shape) {
             multipleSelection(item);
@@ -186,6 +190,7 @@ const Index = () => {
 
   return (
     <div className="container">
+      {name ? null : <Modal setName={setName} />}
       <Button
         color="secondary"
         variant="outlined"
