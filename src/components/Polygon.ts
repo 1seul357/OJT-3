@@ -43,7 +43,7 @@ export default class Polygon {
       this.polygon
         .plot(element.point)
         .addClass("item")
-        .transform(element.transform)
+        .matrix(element.transform)
         .attr({ fill: element.fill });
       this.return();
     } else {

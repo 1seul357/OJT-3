@@ -82,14 +82,12 @@ export const clickGroup = (
       };
 
       const upHandler = () => {
+        group.transform(clone.transform());
         rotate.show();
         rotate
           .cx(cx)
           .cy(y1 - 50)
-          .transform(clone.transform());
-        group.children().forEach((el) => {
-          el.matrix(clone.matrix().multiply(el.matrix()));
-        });
+          .transform(group.transform());
         draw.off("mousemove", moveHandler as EventListener);
         draw.off("mouseup", upHandler);
       };

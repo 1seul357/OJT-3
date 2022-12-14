@@ -1,7 +1,6 @@
-import { Polygon, Shape } from "@svgdotjs/svg.js";
-import { dataType } from "./interface";
+import { Shape } from "@svgdotjs/svg.js";
 
-export const value = (element: Shape) => {
+export const value = (element: Shape, matrix?: Object) => {
   const item = {
     type:
       element.type === "rect"
@@ -14,7 +13,7 @@ export const value = (element: Shape) => {
     x: element.x(),
     y: element.y(),
     point: element.type === "polygon" ? element.plot() : null,
-    transform: element.transform(),
+    transform: matrix ? matrix : element.transform(),
     fill: element.fill(),
   };
   return item;

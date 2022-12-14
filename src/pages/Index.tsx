@@ -1,4 +1,4 @@
-import { Container, List, Shape, Svg, SVG } from "@svgdotjs/svg.js";
+import { Container, Shape, Svg, SVG } from "@svgdotjs/svg.js";
 import "@svgdotjs/svg.draggable.js";
 import { useEffect, useRef, useState } from "react";
 import Button from "@mui/material/Button";
@@ -53,6 +53,9 @@ class SVGController {
     }
   };
   makeUnGrouping = () => {
+    this.g.children().forEach((el) => {
+      el.matrix(this.g.matrix().multiply(el.matrix()));
+    });
     remove.removeGroup(this.draw, this.g);
     this.setGroup(false);
   };
@@ -64,8 +67,9 @@ class SVGController {
     groups.forEach((el) => {
       const arr: any = [];
       el.children().forEach((element) => {
+        const matrix = el.matrix().multiply(element.matrix());
         if (element.hasClass("gclone") || element.hasClass("gselect")) return;
-        arr.push(value(element));
+        arr.push(value(element, matrix));
       });
       array.push({
         type: "g",

@@ -31,7 +31,7 @@ export default class Rectangle {
         .x(element.x)
         .y(element.y)
         .addClass("item")
-        .transform(element.transform)
+        .matrix(element.transform)
         .attr({ fill: element.fill });
       this.return();
     } else {
