@@ -2,7 +2,7 @@ import { useState, ChangeEvent } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import LocalStorage from "../utils/localStorage";
+import { indexDB } from "../utils/indexDB";
 import "../css/modal.css";
 
 export interface propType {
@@ -17,8 +17,11 @@ const Modal = ({ setName }: propType) => {
   const onSubmit = () => {
     if (textValue) {
       setName(true);
-      LocalStorage.setItem("name", textValue);
+      loadData();
     }
+  };
+  const loadData = () => {
+    indexDB("name", textValue);
   };
 
   return (

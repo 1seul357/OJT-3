@@ -11,9 +11,9 @@ import { dragItem } from "../components/Drag";
 import { clickGroup } from "../utils/clickGroup";
 import { Select } from "../components/Select";
 import { dataType } from "../utils/interface";
-import LocalStorage from "../utils/localStorage";
 import { value } from "../utils/value";
 import Modal from "../components/Modal";
+import { indexDB } from "../utils/indexDB";
 
 class SVGController {
   draw: Svg;
@@ -81,8 +81,7 @@ class SVGController {
       if (element.hasClass("clone")) return;
       array.push(value(element));
     });
-    const name = JSON.parse(LocalStorage.getItem("name") || "{}");
-    LocalStorage.setItem(name, array);
+    indexDB("items", array);
   };
   clickItem = (item: Container) => {
     this.g = item;
@@ -143,9 +142,7 @@ const Index = () => {
   const controller = useRef<SVGController>(); // draw
   const [shape, setShape] = useState<Object>();
   const [group, setGroup] = useState<boolean | null>(false);
-  const [name, setName] = useState<boolean>(
-    LocalStorage.getItem("name") ? true : false
-  );
+  const [name, setName] = useState<boolean>(true);
 
   const handleClick = (type: string, element?: dataType) => {
     return controller.current?.insertRect(type, element);
@@ -172,22 +169,45 @@ const Index = () => {
       setGroup,
       setShape
     );
-    const name = JSON.parse(LocalStorage.getItem("name") || "{}");
-    const items = JSON.parse(LocalStorage.getItem(name) || "{}");
-    for (let index = 0; index < items?.length; index++) {
-      const item = items[index];
-      if (item.type === "g") {
-        item.children.forEach((el) => {
-          const item = handleClick(el.type, el);
-          if (item instanceof Shape) {
-            multipleSelection(item);
+
+    let db;
+    const request = window.indexedDB.open("IndexDB");
+    request.onupgradeneeded = (e: any) => {
+      db = e.target.result;
+      db.createObjectStore("name", { keyPath: "id" });
+    };
+    request.onsuccess = () => {
+      const db = request.result;
+      const transaction = db.transaction("name");
+      const objStore = transaction.objectStore("name");
+      const objStoreRequest = objStore.get("name");
+      objStoreRequest.onsuccess = () => {
+        if (objStoreRequest.result === undefined) {
+          setName(false);
+        }
+        const objStoreRequestItem = objStore.get(objStoreRequest.result.value);
+        objStoreRequestItem.onsuccess = () => {
+          for (
+            let index = 0;
+            index < objStoreRequestItem.result.value?.length;
+            index++
+          ) {
+            const item = objStoreRequestItem.result.value[index];
+            if (item.type === "g") {
+              item.children.forEach((el) => {
+                const item = handleClick(el.type, el);
+                if (item instanceof Shape) {
+                  multipleSelection(item);
+                }
+              });
+              makeGrouping();
+            } else {
+              handleClick(item.type, item);
+            }
           }
-        });
-        makeGrouping();
-      } else {
-        handleClick(item.type, item);
-      }
-    }
+        };
+      };
+    };
   }, []);
 
   return (
