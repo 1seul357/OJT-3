@@ -184,28 +184,31 @@ const Index = () => {
       objStoreRequest.onsuccess = () => {
         if (objStoreRequest.result === undefined) {
           setName(false);
-        }
-        const objStoreRequestItem = objStore.get(objStoreRequest.result.value);
-        objStoreRequestItem.onsuccess = () => {
-          for (
-            let index = 0;
-            index < objStoreRequestItem.result.value?.length;
-            index++
-          ) {
-            const item = objStoreRequestItem.result.value[index];
-            if (item.type === "g") {
-              item.children.forEach((el) => {
-                const item = handleClick(el.type, el);
-                if (item instanceof Shape) {
-                  multipleSelection(item);
-                }
-              });
-              makeGrouping();
-            } else {
-              handleClick(item.type, item);
+        } else {
+          const objStoreRequestItem = objStore.get(
+            objStoreRequest.result.value
+          );
+          objStoreRequestItem.onsuccess = () => {
+            for (
+              let index = 0;
+              index < objStoreRequestItem.result.value?.length;
+              index++
+            ) {
+              const item = objStoreRequestItem.result.value[index];
+              if (item.type === "g") {
+                item.children.forEach((el) => {
+                  const item = handleClick(el.type, el);
+                  if (item instanceof Shape) {
+                    multipleSelection(item);
+                  }
+                });
+                makeGrouping();
+              } else {
+                handleClick(item.type, item);
+              }
             }
-          }
-        };
+          };
+        }
       };
     };
   }, []);
