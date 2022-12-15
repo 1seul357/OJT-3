@@ -10,11 +10,8 @@ export const indexDB = (key: string, value: object) => {
 
     objStoreRequest.onsuccess = () => {
       if (key === "items") {
-        const objStoreRequest = objStore.get("name");
-        objStoreRequest.onsuccess = () => {
-          items.id = objStoreRequest.result.value;
-          objStore.put(items);
-        };
+        items.id = objStoreRequest.result.value;
+        objStore.put(items);
       } else {
         objStore.add(items);
       }

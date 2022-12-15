@@ -231,7 +231,7 @@ const Index = () => {
         variant="outlined"
         size="large"
         onClick={() => handleClick("polygon")}>
-        Polygon
+        Triangle
       </Button>
       {group === false ? (
         <Button
