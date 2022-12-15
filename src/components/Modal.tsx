@@ -15,8 +15,10 @@ const Modal = ({ setName }: propType) => {
     setTextValue(e.target.value);
   };
   const onSubmit = () => {
-    setName(true);
-    LocalStorage.setItem("name", textValue);
+    if (textValue) {
+      setName(true);
+      LocalStorage.setItem("name", textValue);
+    }
   };
 
   return (
