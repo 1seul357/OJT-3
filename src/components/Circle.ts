@@ -49,7 +49,7 @@ export default class Circle {
         return;
       }
       if (document.querySelector(".grouping")) {
-        setGroup(null);
+        setGroup(false);
       }
       clickItem(this.circle, draw, multipleSelection, setShape, setGroup);
     });

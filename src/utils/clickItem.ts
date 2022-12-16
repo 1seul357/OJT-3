@@ -25,7 +25,7 @@ export const clickItem = (
     setShape(item);
     remove.removeGroupSelector(draw);
     if (document.querySelector(".grouping")) {
-      setGroup(null);
+      setGroup(false);
     }
     if (e.shiftKey) {
       multipleSelection(item);

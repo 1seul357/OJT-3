@@ -51,7 +51,7 @@ export default class Rectangle {
         return;
       }
       if (document.querySelector(".grouping")) {
-        setGroup(null);
+        setGroup(false);
       }
       clickItem(this.rect, draw, multipleSelection, setShape, setGroup);
     });

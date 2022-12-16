@@ -86,7 +86,7 @@ class SVGController {
   clickItem = (item: Container) => {
     this.g = item;
   };
-  insertRect(type: string, element?: dataType) {
+  insertShape(type: string, element?: dataType) {
     if (type === "rect") {
       const item = new Rectangle(
         this.draw,
@@ -145,7 +145,7 @@ const Index = () => {
   const [name, setName] = useState<boolean>(true);
 
   const handleClick = (type: string, element?: dataType) => {
-    return controller.current?.insertRect(type, element);
+    return controller.current?.insertShape(type, element);
   };
   const makeGroup = () => {
     controller.current?.makeGrouping();

@@ -59,7 +59,7 @@ export default class Polygon {
         return;
       }
       if (document.querySelector(".grouping")) {
-        setGroup(null);
+        setGroup(false);
       }
       clickItem(this.polygon, draw, multipleSelection, setShape, setGroup);
     });
